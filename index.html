@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SwiftyQuote demos</title>
+<meta name="description" content="Buyer-friendly product configurator demos by SwiftyQuote.">
+<style>
+:root{
+  --ink:#22282F; --ink-strong:#0D0D0D; --grey-600:#5A6675; --grey-400:#9AA6B4;
+  --line:#E3E7ED; --bg:#fff; --accent:#0A2540; --accent-hover:#123457;
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:var(--font);color:var(--ink);background:var(--bg);line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:760px;margin:0 auto;padding:64px 24px 56px}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.75rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--grey-600)}
+.eyebrow::before{content:"";width:16px;height:4px;border-radius:2px;background:var(--accent)}
+h1{font-size:clamp(1.9rem,1.4rem + 2vw,2.6rem);font-weight:600;letter-spacing:-.025em;color:var(--accent);margin:14px 0 10px}
+.lead{color:var(--grey-600);font-size:1.02rem;max-width:56ch;margin:0}
+.list{margin-top:40px;border-top:1px solid var(--line)}
+.item{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;padding:24px 0;border-bottom:1px solid var(--line);text-decoration:none;color:inherit}
+.item:hover .name{color:var(--accent-hover)}
+.item:hover .arrow{transform:translateX(3px)}
+.name{font-size:1.15rem;font-weight:650;color:var(--ink-strong);transition:color .15s}
+.desc{color:var(--grey-600);font-size:.92rem;margin-top:4px;max-width:52ch}
+.meta{color:var(--grey-400);font-size:.78rem;margin-top:8px;text-transform:uppercase;letter-spacing:.04em}
+.arrow{flex:none;color:var(--grey-400);font-size:1.3rem;line-height:1;margin-top:4px;transition:transform .15s}
+footer{margin-top:48px;padding-top:20px;border-top:1px solid var(--line);color:var(--grey-400);font-size:.82rem}
+footer a{color:var(--grey-600)}
+@media (max-width:640px){.wrap{padding:40px 18px 40px}.item{gap:12px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <span class="eyebrow">SwiftyQuote demos</span>
+  <h1>Product configurator demos</h1>
+  <p class="lead">Buyer-friendly, step-by-step configurators — plain-language questions, a live summary, a downloadable PDF and a quotation request. Each one below is a working demo built around a real manufacturer's product page.</p>
+
+  <div class="list">
+    <a class="item" href="4tex-sensor-configurator/">
+      <div>
+        <div class="name">4Tex Chemical Liquid Temperature Sensors</div>
+        <div class="desc">FT &amp; FX series PT100 sensors — pick your application, installation, size and options.</div>
+        <div class="meta">4tex.at</div>
+      </div>
+      <span class="arrow">→</span>
+    </a>
+    <a class="item" href="ashcroft-temp-switch-configurator/">
+      <div>
+        <div class="name">Ashcroft T4 / T7 Temperature Switches</div>
+        <div class="desc">NEMA 4X watertight and NEMA 7/9 explosion-proof temperature switches.</div>
+        <div class="meta">ashcroft.com</div>
+      </div>
+      <span class="arrow">→</span>
+    </a>
+    <a class="item" href="wika-tr10-l-configurator/">
+      <div>
+        <div class="name">WIKA TR10-L Resistance Thermometer</div>
+        <div class="desc">Sensor, housing, signal output and process fitting for the TR10-L.</div>
+        <div class="meta">wika.com</div>
+      </div>
+      <span class="arrow">→</span>
+    </a>
+  </div>
+
+  <footer>
+    All product data, photos and logos belong to their respective manufacturers and are used here for demonstration purposes only. These are unofficial, third-party demos — not the manufacturers' own tools. Built by <a href="https://www.swiftyquote.com" target="_blank" rel="noopener">SwiftyQuote</a> — <a href="mailto:sales@swiftyquote.com">sales@swiftyquote.com</a>.
+  </footer>
+</div>
+</body>
+</html>
