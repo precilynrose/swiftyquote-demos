@@ -231,6 +231,9 @@ footer.site .credit{border-top:1px solid rgba(255,255,255,.25);margin-top:20px;p
   .step-btn .dot{width:28px;height:28px}
   .pills{grid-template-columns:1fr}
 }
+@media (max-width:480px){.pills{grid-template-columns:1fr}}
+@media (max-width:560px){.actionbar{flex-wrap:wrap;row-gap:6px}.actionbar .hint:not(:empty){display:block;flex-basis:100%;order:-1;font-size:13px;line-height:1.35}body{padding-bottom:calc(110px + env(safe-area-inset-bottom))}}
+.opt-title,.opt-desc,.opt-note{overflow-wrap:break-word}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
@@ -1271,10 +1274,9 @@ function focusHeading(){ var h=$('#stepTitle'); if(h){ h.focus({preventScroll:tr
 function go(i,opts){
   var prev=S.step; S.notices=S.notices.filter(function(n){return n.step!==prev||i===prev;}); /* a notice is shown once, then dropped when the buyer leaves that step */
   S.step=i; S.visited[i]=true; renderPanel();
-  var top=$('#stepper').getBoundingClientRect().top+window.pageYOffset-8;
-  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  window.scrollTo({top:Math.max(0,top),behavior:reduce?'auto':'smooth'});
   focusHeading();
+  /* jump (not smooth-scroll) to the new step: focusing the heading cancels a smooth scroll, which left phone users far below the question */
+  (function(el){ if(!el) return; var hd=document.querySelector('header'); var off=(hd&&/sticky|fixed/.test(getComputedStyle(hd).position))?hd.offsetHeight:0; var html=document.documentElement, sb=html.style.scrollBehavior; html.style.scrollBehavior='auto'; window.scrollTo(0,Math.max(0,el.getBoundingClientRect().top+window.pageYOffset-off-8)); html.style.scrollBehavior=sb; })($('#stepper'));
 }
 function refresh(){
   var id=document.activeElement&&document.activeElement.id;
