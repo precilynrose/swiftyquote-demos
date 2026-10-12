@@ -1401,7 +1401,9 @@ function renderStep(focus){
   const id = STEPS[S.step].id;
   $("#stage").innerHTML = VIEWS[id]();
   renderStepper(); renderNav(); renderSummary(); refreshFeedback();
-  if (focus){ const h = $("#stepTitle"); if (h){ h.focus({preventScroll:true}); } window.scrollTo({top: Math.max(0, $(".wrap").offsetTop - 90), behavior:"smooth"}); }
+  if (focus){ const h = $("#stepTitle"); if (h){ h.focus({preventScroll:true}); }
+    /* jump to the new step so its question sits right under the header, also on phones */
+    (function(el){ if(!el) return; var hd=document.querySelector('header'); var off=(hd&&/sticky|fixed/.test(getComputedStyle(hd).position))?hd.offsetHeight:0; var html=document.documentElement, sb=html.style.scrollBehavior; html.style.scrollBehavior='auto'; window.scrollTo(0,Math.max(0,el.getBoundingClientRect().top+window.pageYOffset-off-8)); html.style.scrollBehavior=sb; })($("#stepper")); }
 }
 function refreshFeedback(){
   const id = STEPS[S.step].id, el = $("#feedback");
