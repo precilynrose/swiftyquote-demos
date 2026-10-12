@@ -12,6 +12,7 @@ in its own repository:
 | 4Tex Chemical Liquid Temperature Sensors | [`/4tex-sensor-configurator/`](https://demo.swiftyquote.com/4tex-sensor-configurator/) | [4tex-sensor-configurator](https://github.com/precilynrose/4tex-sensor-configurator) |
 | Ashcroft T4/T7 Temperature Switches | [`/ashcroft-temp-switch-configurator/`](https://demo.swiftyquote.com/ashcroft-temp-switch-configurator/) | [ashcroft-temp-switch-configurator](https://github.com/precilynrose/ashcroft-temp-switch-configurator) |
 | WIKA TR10-L Resistance Thermometer | [`/wika-tr10-l-configurator/`](https://demo.swiftyquote.com/wika-tr10-l-configurator/) | [wika-tr10-l-configurator](https://github.com/precilynrose/wika-tr10-l-configurator) |
+| DwyerOmega TJ36 Transition Joint Probes | [`/dwyeromega-tj36-configurator/`](https://demo.swiftyquote.com/dwyeromega-tj36-configurator/) | (source not yet in its own repo) |
 
 ## Adding a new demo
 
