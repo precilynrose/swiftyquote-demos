@@ -1336,7 +1336,8 @@ function goStep(n,focus){
   state.step=n; state.notice=''; renderStep();
   if(focus!==false){
     const t=$('#stepTitle'); if(t) t.focus({preventScroll:true});
-    $('#stepper').closest('nav').scrollIntoView({block:'start',behavior:reduceMotion()?'auto':'smooth'});
+    /* jump (not smooth-scroll) to the new step: the smooth scroll was cancelled, which left phone users far below the question */
+    (function(el){ if(!el) return; var hd=document.querySelector('header'); var off=(hd&&/sticky|fixed/.test(getComputedStyle(hd).position))?hd.offsetHeight:0; var html=document.documentElement, sb=html.style.scrollBehavior; html.style.scrollBehavior='auto'; window.scrollTo(0,Math.max(0,el.getBoundingClientRect().top+window.pageYOffset-off-8)); html.style.scrollBehavior=sb; })($('#stepper').closest('nav'));
   }
 }
 function applyStd(n){
@@ -1559,12 +1560,20 @@ async function buildPdf(){
     font('normal',9,INK); const ls=wrap(r[1],w); doc.text(ls,x,yy+6.3);
     const h=3.4+ls.length*3.9+2.6; hair(x,yy+h-0.6,x+w); return h;
   }
-  function groupBlock(g){
-    const rows=g.rows.map(r=>[r.label,r.value+(r.auto?' (filled in)':'')]);
+  /* a group of rows; split() breaks it so the part that fits stays on this page and the rest continues */
+  function groupBlock(g,rowsIn,cont){
+    const rows=rowsIn||g.rows.map(r=>[r.label,r.value+(r.auto?' (filled in)':'')]);
     let h=7; rows.forEach(r=>{ h+=rowH(r,CW); });
-    return {h,draw:(x,yy,w)=>{ font('bold',7.5,NAVY); txt(g.name.toUpperCase(),x,yy+3,{charSpace:0.3}); let cy=yy+6; rows.forEach(r=>{ cy+=drawRow(r,x,cy,w); }); }};
+    return {h,
+      draw:(x,yy,w)=>{ font('bold',7.5,NAVY); txt(g.name.toUpperCase()+(cont?' (CONTINUED)':''),x,yy+3,{charSpace:0.3}); let cy=yy+6; rows.forEach(r=>{ cy+=drawRow(r,x,cy,w); }); },
+      split:avail=>{ let hh=7,k=0; while(k<rows.length&&hh+rowH(rows[k],CW)<=avail){ hh+=rowH(rows[k],CW); k++; } if(k<2||rows.length-k<2) return null; return [groupBlock(g,rows.slice(0,k),cont),groupBlock(g,rows.slice(k),true)]; }};
   }
   function rowBlock(r){ return {h:rowH(r,CW),draw:(x,yy,w)=>{ drawRow(r,x,yy,w); }}; }
+  /* compact label/value row for the long technical-data list */
+  function techBlock(r){
+    font('normal',8.2); const ls=wrap(r[1],CW); const h=3+ls.length*3.5+2.2;
+    return {h,draw:(x,yy,w)=>{ font('normal',6.9,GREY); txt(r[0],x,yy+2.4); font('normal',8.2,INK); doc.text(ls,x,yy+5.6); hair(x,yy+h-0.6,x+w); }};
+  }
   function bulletBlock(t,color){
     font('normal',8.6); const ls=wrap(t,CW-5); const h=ls.length*3.8+0.8;
     return {h,draw:(x,yy,w)=>{ doc.setFillColor(...color); doc.circle(x+1,yy+2,0.7,'F'); font('normal',8.6,INK); doc.text(ls,x+4.5,yy+2.8); }};
@@ -1578,7 +1587,8 @@ async function buildPdf(){
       let idx=0;
       if(!fits(queue[0])){
         const j=queue.findIndex(fits);
-        if(j>0) idx=j; else { flush(); newPage(); }
+        if(j>0) idx=j;
+        else { const c=cols[0]<=cols[1]?0:1, parts=queue[0].split&&queue[0].split(BOTTOM-y-cols[c]); if(parts){ queue.splice(0,1,parts[0],parts[1]); } else { flush(); newPage(); } }
       }
       const b=queue.splice(idx,1)[0]; const c=cols[0]<=cols[1]?0:1;
       items.push({b,c,off:cols[c]}); cols[c]+=b.h+gy;
@@ -1603,12 +1613,12 @@ async function buildPdf(){
   });
   y=Math.max(ty+9,top+50);
 
-  h2('Your selection',45); masonry(summaryGroups(a).map(groupBlock),7);
+  h2('Your selection',45); masonry(summaryGroups(a).map(g=>groupBlock(g)),7);
   h2('Points we will check with you');
   const pts=pointsToCheck(a);
   if(pts.length) bullets(pts.map(p=>ptText(p.text)),AMBER); else bullets(['No open points noted. We will still confirm all details with you.'],GREEN);
   h2('Delivery and installation notes',22); masonry(DELIVERY.map(t=>bulletBlock(t,BLUE)),2.5);
-  h2('Technical data, WIKA data sheet '+SETTINGS.DATASHEET_NO,22); masonry(TECH.map(rowBlock),0);
+  h2('Technical data, WIKA data sheet '+SETTINGS.DATASHEET_NO,22); masonry(TECH.map(techBlock),0);
   h2('Your notes'); font('normal',9,INK); { const ls=wrap(state.notes||'No notes.',W); ensure(ls.length*4+2); doc.text(ls,L,y+3); y+=ls.length*4+3; }
 
   /* disclaimer */
