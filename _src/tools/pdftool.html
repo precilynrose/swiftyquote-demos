@@ -1,0 +1,24 @@
+<!doctype html><meta charset="utf-8"><title>pdftool</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>
+pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+async function run(file, prefix, pages, scale){
+  const pdf = await pdfjsLib.getDocument(file).promise; let text = "";
+  for (let p = 1; p <= pdf.numPages; p++){
+    const pg = await pdf.getPage(p); const tc = await pg.getTextContent();
+    let lastY = null, line = [];
+    const lines = [];
+    tc.items.forEach(it => { const y = Math.round(it.transform[5]); if (lastY !== null && Math.abs(y - lastY) > 2){ lines.push(line.join(" ")); line = []; } line.push(it.str); lastY = y; });
+    lines.push(line.join(" "));
+    text += `\n===== PAGE ${p} =====\n` + lines.filter(l => l.trim()).join("\n");
+    if (pages.includes(p)){
+      const vp = pg.getViewport({ scale }); const c = document.createElement("canvas"); c.width = vp.width; c.height = vp.height;
+      await pg.render({ canvasContext: c.getContext("2d"), viewport: vp }).promise;
+      const b = await new Promise(r => c.toBlob(r, "image/png"));
+      await fetch(`/save/${prefix}-p${p}.png`, { method:"POST", body:b });
+    }
+  }
+  await fetch(`/save/${prefix}.txt`, { method:"POST", body:text });
+  return pdf.numPages;
+}
+</script>

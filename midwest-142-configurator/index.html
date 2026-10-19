@@ -1801,5 +1801,167 @@ window.__cfg = { get S(){ return S; }, set S(v){ S = v; }, go, modelCode, getNot
 /* ---------- start ---------- */
 renderStep(false);
 </script>
+<!-- One question at a time (SwiftyQuote). Shows the questions of each step one by one and moves on after an answer.
+     Works from the page structure only, so it sits on top of any SwiftyQuote demo. Set window.OQ_CONFIG before this script for non-standard demos. -->
+<style>
+.oq-meta{display:flex;align-items:center;gap:10px;margin:18px 0 4px;font-size:.78rem;font-weight:600;color:#6b7280;letter-spacing:.04em;text-transform:uppercase}
+.oq-dots{display:flex;gap:5px}
+.oq-dots i{width:7px;height:7px;border-radius:50%;background:#d6dbe1;display:block}
+.oq-dots i.on{background:#1f2937}
+.oq-dots i.done{background:#9aa5b1}
+.step.oq .group{margin-top:12px}
+.step.oq .group__title{font-size:1.45rem;line-height:1.25;text-transform:none;letter-spacing:-.015em;color:var(--navy-800);font-weight:600}
+.step.oq .group__sub{font-size:.95rem;color:var(--grey-600);margin-top:6px}
+.step.oq .opts{margin-top:18px}
+.step.oq h2{font-size:1rem;font-weight:600;color:var(--grey-600);margin-top:4px;letter-spacing:0}
+.step.oq .lead{display:none}
+</style>
+<script>
+"use strict";
+(function(){
+  const C = Object.assign({
+    container: "#stage",                 /* element whose content is the current step */
+    question: ".step > .group",          /* one question block */
+    next: "#btnNext", back: "#btnBack",  /* the demo's own buttons */
+    hint: ".nav__hint, #btnHint",        /* "please answer" hint next to the buttons */
+    nav: "#nav",                         /* where to add a Back button if the demo has none */
+    title: "#stepTitle",
+    scrollTo: "#stepper",
+    stepClass: ".step"                   /* gets class "oq" for the bigger question styling */
+  }, window.OQ_CONFIG || {});
+  const $ = s => document.querySelector(s);
+  let Q = 0, goLast = false, key = null, applying = false, mo = null;
+  const app = new WeakMap();             /* button -> disabled state wanted by the demo */
+
+  const isOurs = el => el.dataset.oqHidden === "1";
+  const appHidden = el => !isOurs(el) && (el.hidden || el.style.display === "none");
+
+  function blocks(){
+    const root = $(C.container); if (!root) return null;
+    if (root.querySelector("#btnQuote,#btnPdf,[id*=quote i],[id*=pdf i]")) return null;   /* review screen */
+    const qs = [...root.querySelectorAll(C.question)].filter(q => !appHidden(q) && !q.closest("[hidden]") && q.querySelector("input,select,textarea"));
+    if (qs.length < 2) return null;
+    return qs.map((q, i) => {
+      const b = [q]; let n = q.nextElementSibling;
+      while (n && n !== qs[i + 1] && !n.matches(C.question)) {
+        if (n.querySelector("input,select,textarea") && !n.matches("details,.feedback,#fb")) b.push(n);
+        n = n.nextElementSibling;
+      }
+      return b;
+    });
+  }
+  const shown = i => !i.closest("[hidden]") && ![...ancestors(i)].some(a => a.style && a.style.display === "none" && !a.dataset.oqHidden);
+  function* ancestors(el){ while (el && el !== document.body){ yield el; el = el.parentElement; } }
+  const inputs = (b, sel) => b.flatMap(el => [...el.querySelectorAll(sel)]).filter(shown);
+  function answered(b){
+    const radios = inputs(b, "input[type=radio]");
+    const names = [...new Set(radios.map(r => r.name))];
+    if (!names.every(n => radios.some(r => r.name === n && r.checked))) return false;
+    if (!inputs(b, "select").every(s => s.value !== "")) return false;
+    /* typed fields count as required unless their label says optional */
+    if (inputs(b, "input,select,textarea").some(i => i.getAttribute("aria-invalid") === "true" || i.classList.contains("invalid"))) return false;
+    return inputs(b, "input[type=text],input[type=number]").every(i => i.disabled || i.value.trim() || /optional/i.test(((i.closest("label,.field,.inline-field") || {}).textContent || "") + (i.placeholder || "")));
+  }
+  const needsTyping = b => inputs(b, "input[type=text],input[type=number],textarea").length > 0;
+
+  function setDisabled(btn, v){ if (btn && btn.disabled !== v) btn.disabled = v; }
+  function remember(btn){ if (btn && !app.has(btn)) app.set(btn, btn.disabled); }
+
+  function apply(){
+    if (applying) return; applying = true; mo && mo.disconnect();
+    try {
+      const root = $(C.container), next = $(C.next), back = $(C.back);
+      remember(next); remember(back);
+      root && root.querySelectorAll(".oq-meta").forEach(e => e.remove());
+      document.querySelectorAll("[data-oq-hidden]").forEach(el => { el.style.display = ""; delete el.dataset.oqHidden; });
+      document.getElementById("oqBack")?.remove();
+      document.querySelectorAll("[data-oq-vis]").forEach(el => { el.style.visibility = el.dataset.oqVis; delete el.dataset.oqVis; });
+      document.querySelectorAll("[data-oq-hint]").forEach(h => { h.style.visibility = ""; delete h.dataset.oqHint; });
+      const bl = blocks();
+      const stepEl = root && root.querySelector(C.stepClass);
+      const k = ($(C.title) || {}).textContent || "";
+      if (k !== key){ Q = goLast && bl ? bl.length - 1 : 0; goLast = false; key = k; }
+      if (!bl){
+        stepEl && stepEl.classList.remove("oq");
+        if (next && app.has(next)) setDisabled(next, app.get(next));
+        if (back && app.has(back)) setDisabled(back, app.get(back));
+        return;
+      }
+      stepEl && stepEl.classList.add("oq");
+      Q = Math.max(0, Math.min(Q, bl.length - 1));
+      bl.forEach((b, i) => { if (i !== Q) b.forEach(el => { el.style.display = "none"; el.dataset.oqHidden = "1"; }); });
+      const meta = document.createElement("div");
+      meta.className = "oq-meta";
+      meta.innerHTML = `<span>Question ${Q + 1} of ${bl.length}</span><span class="oq-dots">${bl.map((_, i) => `<i class="${i === Q ? "on" : i < Q ? "done" : ""}"></i>`).join("")}</span>`;
+      bl[Q][0].before(meta);
+      const last = Q === bl.length - 1, ok = answered(bl[Q]);
+      if (next) setDisabled(next, last ? app.get(next) : !ok);
+      if (!last && ok) document.querySelectorAll(C.hint).forEach(h => { h.style.visibility = "hidden"; h.dataset.oqHint = "1"; });
+      if (back) setDisabled(back, Q > 0 ? false : app.get(back));
+      if (Q > 0 && back && back.offsetParent !== null && getComputedStyle(back).visibility === "hidden"){ back.dataset.oqVis = back.style.visibility; back.style.visibility = "visible"; }
+      if (Q > 0 && (!back || back.offsetParent === null)){
+        const nav = $(C.nav);
+        if (nav){
+          const b = document.createElement("button");
+          b.type = "button"; b.id = "oqBack"; b.className = back ? back.className : "btn btn--ghost"; b.textContent = "← Back";
+          const ph = nav.firstElementChild;
+          if (ph && ph.tagName === "SPAN" && !ph.textContent.trim()) ph.replaceWith(b); else nav.prepend(b);
+        }
+      }
+    } finally {
+      applying = false; observe();
+    }
+  }
+  function observe(){
+    if (!mo) mo = new MutationObserver(recs => {
+      const sel = `${C.next},${C.back}`;
+      recs.forEach(r => {
+        if (r.type === "attributes" && r.target.matches && r.target.matches(sel)){ if (r.attributeName === "style") delete r.target.dataset.oqVis; else app.set(r.target, r.target.disabled); }
+        r.addedNodes && r.addedNodes.forEach(n => { if (!n.querySelectorAll) return; if (n.matches(sel)) app.set(n, n.disabled); n.querySelectorAll(sel).forEach(b => app.set(b, b.disabled)); });
+      });
+      queueMicrotask(apply);
+    });
+    mo.observe(document.body, { childList:true, subtree:true, attributes:true, attributeFilter:["disabled","style"] });
+  }
+  function scrollUp(){
+    const el = $(C.scrollTo) || $(C.container); if (!el) return;
+    const hd = document.querySelector("header"); const off = hd && /sticky|fixed/.test(getComputedStyle(hd).position) ? hd.offsetHeight : 0;
+    const y = el.getBoundingClientRect().top + window.pageYOffset - off - 8;
+    if (Math.abs(window.pageYOffset - y) > 4){ const h = document.documentElement, sb = h.style.scrollBehavior; h.style.scrollBehavior = "auto"; window.scrollTo(0, Math.max(0, y)); h.style.scrollBehavior = sb; }
+  }
+  function move(d){ Q += d; apply(); scrollUp(); }
+
+  document.addEventListener("click", e => {
+    const b = e.target.closest("button"); if (!b) return;
+    if (b.id === "oqBack"){ e.preventDefault(); e.stopImmediatePropagation(); if (Q > 0) move(-1); return; }
+    const bl = blocks();
+    if (!bl){ if (b.matches(C.back)) goLast = true; return; }
+    if (b.matches(C.next) && Q < bl.length - 1){ e.preventDefault(); e.stopImmediatePropagation(); if (answered(bl[Q])) move(1); return; }
+    if (b.matches(C.back)){
+      if (Q > 0){ e.preventDefault(); e.stopImmediatePropagation(); move(-1); }
+      else goLast = true;
+    }
+  }, true);
+
+  document.addEventListener("input", () => setTimeout(apply, 0));
+
+  let timer;
+  document.addEventListener("change", e => {
+    if (e.target.type !== "radio") return;
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      const bl = blocks(); if (!bl) return;
+      const cur = bl[Q]; if (!cur || !answered(cur) || needsTyping(cur)) return;
+      if (cur.some(el => el.querySelector("input[type=checkbox]"))) return;
+      if (Q < bl.length - 1) move(1);
+      else { const n = $(C.next); if (n && !n.disabled && n.offsetParent !== null) n.click(); }
+    }, 420);
+  });
+
+  apply();
+  window.__oq = { get Q(){ return Q; }, blocks, apply, move };
+})();
+</script>
+
 </body>
 </html>
