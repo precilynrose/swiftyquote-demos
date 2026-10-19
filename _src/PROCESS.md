@@ -25,7 +25,9 @@ Match that structure, style, tone and level of detail exactly.
    - live summary, part number built from the ordering code, warnings and info notes, PDF (jsPDF) and mailto quotation, ref prefix from the brand initials
    - `window.__cfg` test hooks
 5. Build: `perl _src/common/build.pl _src/<shortname> ~/SwiftyQuote-demos/<slug>/index.html LOGO=... IMG_X=...` (placeholders `__LOGO__`, `__IMG_X__`, `/*__BASECSS__*/`, `<!--__JSPDF__-->`, `/*__APP__*/`). Slug pattern: `<brand>-<product>-configurator`.
+   build.pl also adds `common/one-question.html` to every demo, so the page asks ONE question at a time inside each step: a "Question x of y" indicator, automatic advance after a choice, and a working Back. Design each step as a list of `.group` blocks (one question per `.group`, any text field for that question placed right after it in an element with the input inside); the review step must contain `#btnQuote`/`#btnPdf`. Mark typed fields that may stay empty with "(optional)" in their label.
 6. Test: serve ~/SwiftyQuote-demos with `ruby -run -e httpd . -p 8765 -b 127.0.0.1` (background) and open http://127.0.0.1:8765/<slug>/ in the browser pane.
+   - Walk the whole demo question by question: `await eval(await (await fetch('/_src/tools/walk.js')).text())` answers every question and must end on "Review your configuration" with `errs: []`. If it stops, check whether the demo or the test answers are at fault (for example min above max) and fix the demo if needed.
    - No console errors.
    - Walk 3–4 scenarios through `__cfg`, including the standard configuration and a few forbidden combinations. Check the part numbers against the datasheet example.
    - `buildPdf()` must not throw. Visually check one PDF: build it in the page, POST it to http://127.0.0.1:8766/save/x.pdf with Content-Type text/plain, then Read it.

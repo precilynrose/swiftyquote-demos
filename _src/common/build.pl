@@ -11,6 +11,9 @@ my $css = slurp("$common/base.css"); my $js = slurp("$common/jspdf.html");
 $html =~ s{/\*__BASECSS__\*/}{$css};
 $html =~ s{<!--__JSPDF__-->}{$js};
 for my $m (@maps){ my ($k, $p) = split /=/, $m, 2; my $d = b64($p); $html =~ s/__${k}__/$d/g; }
+# one question at a time: added to every demo before the last </body>
+my $oq = slurp("$common/one-question.html");
+$html =~ s{</body>(?!.*</body>)}{$oq\n</body>}s or die "no </body>\n";
 die "unreplaced: $1\n" if $html =~ /(__(?:IMG_[A-Z0-9]+|LOGO)__)/;
 open my $o, '>', $out or die $!; binmode $o; print $o $html; close $o;
 print "ok ", length($html), "\n";
