@@ -4,8 +4,8 @@
    SETTINGS: adjust these lines for your own set-up
    ===================================================================== */
 const SETTINGS = {
-  QUOTE_EMAIL: "sales@kurzinstruments.com", // where quotation requests are sent (Kurz sales)
-  QUOTE_CC: "sales@swiftyquote.com",        // always copied on every quotation request
+  QUOTE_EMAIL: "sales@swiftyquote.com", // where quotation requests are sent (Kurz sales)
+  QUOTE_CC: "",        // always copied on every quotation request
   TRACKING_TAG: "swiftyquote.com",          // always added to the email subject so requests can be tracked
   QUOTE_ENDPOINT: ""                        // optional: URL of a form service (e.g. Formspree). If set, requests are POSTed there instead of opening the mail app.
 };
@@ -915,7 +915,7 @@ function quoteText(withHeaders){
   const f = Object.fromEntries(new FormData($("#quoteForm")).entries());
   const n = getNotes();
   return [
-    ...(withHeaders ? [`To: ${SETTINGS.QUOTE_EMAIL}`, `Cc: ${SETTINGS.QUOTE_CC}`, `Subject: ${quoteSubject()}`, ""] : []),
+    ...(withHeaders ? [`To: ${SETTINGS.QUOTE_EMAIL}`, ...(SETTINGS.QUOTE_CC ? [`Cc: ${SETTINGS.QUOTE_CC}`] : []), `Subject: ${quoteSubject()}`, ""] : []),
     `Quotation request | Series 454FTB insertion thermal mass flow meter | Ref. ${S.ref}`, "",
     "CONFIGURATION", ...configLines(),
     ...(n.warn.length ? ["", "TO BE CHECKED", ...n.warn.map(w => "- " + w)] : []),
@@ -925,7 +925,7 @@ function quoteText(withHeaders){
     `Name: ${f.name || ""}`, `Company: ${f.company || ""}`, `Email: ${f.email || ""}`, `Phone: ${f.phone || ""}`, `Delivery to: ${f.place || ""}`
   ].join("\n");
 }
-const buildMailto = body => `mailto:${SETTINGS.QUOTE_EMAIL}?cc=${encodeURIComponent(SETTINGS.QUOTE_CC)}&subject=${encodeURIComponent(quoteSubject())}&body=${encodeURIComponent(body)}`;
+const buildMailto = body => `mailto:${SETTINGS.QUOTE_EMAIL}?${SETTINGS.QUOTE_CC ? `cc=${encodeURIComponent(SETTINGS.QUOTE_CC)}&` : ""}subject=${encodeURIComponent(quoteSubject())}&body=${encodeURIComponent(body)}`;
 let lastFocus = null;
 function openQuote(){
   if (!isComplete()){ toast("Please complete all steps first."); return; }

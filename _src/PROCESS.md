@@ -19,7 +19,7 @@ Match that structure, style, tone and level of detail exactly.
 3. Gather brand assets from the manufacturer's site: logo (dark version for white background; crop it from a high-res PDF render if needed), 1–3 clean product photos (convert big PNGs to JPEG at about 420 px with `sips -s format jpeg -Z 420`), brand colours, phone, email and address.
 4. Create `_src/<shortname>/shell.html` and `app.js` by copying ue1 and rewriting the product-specific parts:
    - brand tokens in :root, header, hero, footer, contact details and the trademark line
-   - SETTINGS.QUOTE_EMAIL = the manufacturer's sales email (QUOTE_CC stays sales@swiftyquote.com, TRACKING_TAG "swiftyquote.com")
+   - SETTINGS.QUOTE_EMAIL = "sales@swiftyquote.com" and QUOTE_CC = "" (user decision 2026-10-20: every quotation request goes ONLY to SwiftyQuote, never to the manufacturer). TRACKING_TAG stays "swiftyquote.com". The manufacturer's email may still appear as contact info in the header, summary and PDF footer.
    - the DEMO_FAQ texts with the brand name swapped (same questions)
    - 5–6 buyer-friendly steps in plain language (application first, then the main choices, extras, review), with greyed-out options and a reason when a rule forbids them
    - live summary, part number built from the ordering code, warnings and info notes, PDF (jsPDF) and mailto quotation, ref prefix from the brand initials

@@ -708,8 +708,8 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
    SETTINGS - change these values to re-point the configurator
    ===================================================================== */
 var SETTINGS = {
-  QUOTE_TO: 'info@ashcroft.com',         // recipient of the quotation request (World HQ address on ashcroft.com/contact)
-  QUOTE_CC: 'sales@swiftyquote.com',     // ALWAYS copied on every quotation request (tracking)
+  QUOTE_TO: 'sales@swiftyquote.com',         // recipient of the quotation request (World HQ address on ashcroft.com/contact)
+  QUOTE_CC: '',     // ALWAYS copied on every quotation request (tracking)
   TRACKING_TAG: 'swiftyquote.com',       // ALWAYS included in the email subject (tracking)
   QUOTE_ENDPOINT: '',                    // optional form-service URL (POST JSON). When set it replaces the mailto: link
   COMPANY: 'Ashcroft Inc.',
@@ -1362,10 +1362,10 @@ function requestBody(f){
   return L.join('\n');
 }
 function requestFull(f){
-  return 'To: '+SETTINGS.QUOTE_TO+'\nCc: '+SETTINGS.QUOTE_CC+'\nSubject: '+subjectLine()+'\n\n'+requestBody(f);
+  return 'To: '+SETTINGS.QUOTE_TO+(SETTINGS.QUOTE_CC?'\nCc: '+SETTINGS.QUOTE_CC:'')+'\nSubject: '+subjectLine()+'\n\n'+requestBody(f);
 }
 function buildMailto(f){
-  var q='cc='+encodeURIComponent(SETTINGS.QUOTE_CC).replace(/%40/g,'@')+'&subject='+encodeURIComponent(subjectLine())+'&body='+encodeURIComponent(requestBody(f));
+  var q=(SETTINGS.QUOTE_CC?'cc='+encodeURIComponent(SETTINGS.QUOTE_CC).replace(/%40/g,'@')+'&':'')+'subject='+encodeURIComponent(subjectLine())+'&body='+encodeURIComponent(requestBody(f));
   return 'mailto:'+SETTINGS.QUOTE_TO+'?'+q;
 }
 
@@ -1524,7 +1524,7 @@ function showConfirm(mode,err){
   $('#dialog').innerHTML='<button type="button" class="x" id="mClose" aria-label="Close">×</button><h2 id="mTitle" tabindex="-1">'+(mode==='sent'?'Request sent':'Your email is ready')+'</h2>'+
     '<p>'+(mode==='sent'?'Thank you. Your configuration was sent and we will come back to you with a quotation.':'Your email program should now open with the request filled in. Please <strong>attach the PDF</strong> and press send.')+'</p>'+
     (err?'<div class="notice">'+esc(err)+'</div>':'')+
-    '<p class="small">If your email program cut the text short, use "Copy request text" below.</p><p class="small">Recipient: '+esc(SETTINGS.QUOTE_TO)+' &middot; Copy: '+esc(SETTINGS.QUOTE_CC)+'<br>Subject: '+esc(subjectLine())+'</p>'+
+    '<p class="small">If your email program cut the text short, use "Copy request text" below.</p><p class="small">Recipient: '+esc(SETTINGS.QUOTE_TO)+(SETTINGS.QUOTE_CC?' &middot; Copy: '+esc(SETTINGS.QUOTE_CC):'')+'<br>Subject: '+esc(subjectLine())+'</p>'+
     '<div class="btnrow"><button type="button" class="btn btn-primary" id="mPdf">Download PDF to attach</button><button type="button" class="btn btn-secondary" id="mCopy">Copy request text</button></div>'+
     (mode==='mailto'?'<div class="btnrow"><button type="button" class="btn btn-secondary" id="mAgain">Open the email again</button></div>':'')+
     '<div class="btnrow"><button type="button" class="btn btn-secondary" id="mDone">Close</button></div>'+
