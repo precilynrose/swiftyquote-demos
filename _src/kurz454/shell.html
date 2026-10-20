@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>454FTB Configurator | Kurz Instruments</title>
+<meta name="description" content="Configure a Kurz Instruments Series 454FTB insertion thermal mass flow meter step by step, download the configuration as PDF and request a quotation. Demo.">
+<style>
+:root{
+  /* Kurz Instruments brand tokens (logo and kurzinstruments.com blue #0061AA, site greys #454545 / #4D4D4F) */
+  --navy-900:#2B2B2D; --navy-800:#3A3A3C; --navy-700:#4D4D4F; --navy-600:#5C5C5F;
+  --blue:#0061AA; --blue-soft:#E6F0F8;
+  --steel:#7FA7CC;
+  --grey-050:#F5F7F9; --grey-100:#E9EDF1; --grey-200:#D5DCE3; --grey-400:#909090; --grey-600:#5E6166;
+  --ink:#454545; --ink-strong:#232325;
+  --label:#0061AA;            /* Kurz blue (logo letters) */
+  --ok:#1B7F4B; --ok-soft:#E7F5EC;
+  --warn:#8A5A00; --warn-soft:#FFF5DB; --warn-line:#F0D48A;
+  --bg:#FFFFFF; --card:#FFFFFF;
+  --radius:10px; --radius-lg:18px;
+  --shadow-sm:0 1px 2px rgba(0,0,0,.06),0 1px 3px rgba(0,0,0,.05);
+  --shadow-md:0 4px 16px rgba(0,0,0,.08),0 2px 6px rgba(0,0,0,.05);
+  --font:"Myriad Pro","Segoe UI",Arial,Helvetica,sans-serif;
+  --font-display:"Myriad Pro","Segoe UI",Arial,Helvetica,sans-serif;
+}
+/*__BASECSS__*/
+
+/* ---------- Kurz additions ---------- */
+.brand img{height:40px;width:auto}
+.btn--primary{background:var(--blue);border-color:var(--blue)}
+.btn--primary:hover{background:#004F8C}
+.opt.is-off{cursor:not-allowed}
+.opt.is-off .opt__body{opacity:.5;background:var(--grey-050)}
+.opt.is-off input{cursor:not-allowed}
+.opt__mark.sq{border-radius:5px}
+.code-box{margin-top:22px;padding:14px 16px;border:1px solid var(--line);border-radius:var(--radius)}
+.code-box .k{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--grey-600)}
+.code-box .v{font:700 1.15rem/1.35 ui-monospace,Menlo,Consolas,monospace;color:var(--navy-800);margin-top:4px;overflow-wrap:anywhere}
+.code-box .s{font-size:.82rem;color:var(--grey-600);margin-top:4px}
+.code-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px 14px;margin-top:12px;font-size:.8rem;color:var(--grey-600)}
+.code-grid b{font:700 .85rem ui-monospace,Menlo,Consolas,monospace;color:var(--navy-800);margin-right:6px}
+.summary__code{margin-top:10px;font:600 .9rem/1.35 ui-monospace,Menlo,Consolas,monospace;color:var(--navy-800);overflow-wrap:anywhere}
+.summary__img img{max-height:260px;object-fit:contain}
+.summary dd{overflow-wrap:anywhere;max-width:62%}
+.opt__meta{font-family:ui-monospace,Menlo,Consolas,monospace}
+.inline-field{margin-top:14px}
+.inline-field .grid2{margin-top:0}
+.field input[aria-invalid="true"]{border-color:#C0392B;box-shadow:0 0 0 3px rgba(192,57,43,.12)}
+@media (max-width:640px){.brand img{height:32px}.summary dd{max-width:58%}
+  .header__contact a:first-child{display:inline}.header__contact a:last-child{display:none}}
+</style>
+</head>
+<body>
+<!-- SwiftyQuote: back to the main website -->
+<style>.sq-back{background:#f4f5f7;border-bottom:1px solid #e3e5e8;font:600 14px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}.sq-back div{max-width:1180px;margin:0 auto;padding:0 16px}.sq-back a{color:#1f2937;text-decoration:none;display:inline-flex;align-items:center;gap:6px;min-height:40px}.sq-back a:hover{text-decoration:underline}.sq-back a:focus-visible{outline:3px solid #2563eb;outline-offset:2px;border-radius:4px}@media print{.sq-back{display:none}}</style>
+<nav class="sq-back" aria-label="SwiftyQuote"><div><a href="https://swiftyquote.com/"><span aria-hidden="true">&larr;</span> Back to SwiftyQuote</a></div></nav>
+
+<header class="site-header">
+  <div class="site-header__in">
+    <a class="brand" href="https://www.kurzinstruments.com/" target="_blank" rel="noopener" aria-label="Kurz Instruments (opens in a new tab)">
+      <img src="__LOGO__" alt="Kurz Instruments" width="420" height="238">
+      <span class="brand__sep" aria-hidden="true"></span>
+      <span class="brand__title">454FTB Configurator</span>
+    </a>
+    <div class="header__contact">
+      <a href="tel:+18004247356">800-424-7356</a>
+      <a href="mailto:sales@kurzinstruments.com">sales@kurzinstruments.com</a>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero__in">
+    <span class="eyebrow">Insertion thermal mass flow meter · Series 454FTB</span>
+    <h1>Configure your 454FTB flow meter</h1>
+    <p>Answer a few simple questions about your gas, your pipe or duct and how the meter is wired. We check the probe lengths, flanges, temperature limits and approvals for you. Then download your configuration as a PDF or request a quotation.</p>
+  </div>
+</section>
+
+<main class="wrap">
+  <section class="panel" aria-live="polite">
+    <ol class="stepper" id="stepper" aria-label="Progress"></ol>
+    <div id="stage"></div>
+    <div class="nav" id="nav"></div>
+  </section>
+
+  <aside class="panel summary" aria-label="Your configuration so far">
+    <div class="summary__img" id="sumImgBox"><img id="sumImg" src="__IMG_M__" alt="Kurz Series 454FTB insertion thermal mass flow meter"></div>
+    <div class="summary__body">
+      <div class="summary__kicker">Your flow meter</div>
+      <div class="summary__model" id="sumModel">Series 454FTB flow meter</div>
+      <div class="summary__sub" id="sumSub">Your choices appear here as you go.</div>
+      <div class="summary__code" id="sumCode"></div>
+      <dl id="sumList"></dl>
+      <div class="summary__help">Questions? Call <a href="tel:+18004247356">800-424-7356</a> or write to <a href="mailto:sales@kurzinstruments.com">sales@kurzinstruments.com</a>.</div>
+    </div>
+  </aside>
+</main>
+
+<section class="faq" id="faq" aria-labelledby="faqTitle">
+  <div class="faq__box">
+    <div class="faq__grid">
+      <div>
+        <span class="eyebrow" style="color:var(--steel)">About this demo</span>
+        <h2 id="faqTitle">Frequently asked questions</h2>
+        <p class="faq__intro">Curious how this works, or want the same for your own products? Here are the answers to the questions we hear most.</p>
+        <div class="faq__cta">
+          <a class="btn btn--primary" id="faqCta" href="#">Ask about your own configurator</a>
+          <span class="faq__note" id="faqContact"></span>
+        </div>
+      </div>
+      <div class="faq__list" id="faqList"></div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="site-footer__in">
+    <span>Kurz Instruments, Inc. · 2411 Garden Road · Monterey, CA 93940 USA · 800-424-7356 · 831-646-5911</span>
+    <span><a href="https://www.kurzinstruments.com/" target="_blank" rel="noopener">Website</a> · <a href="https://www.kurzinstruments.com/downloads/454ftb/Kurz-Model-454FTB-Technical-Specifications.pdf" target="_blank" rel="noopener">Technical specifications (PDF)</a> · <a href="mailto:sales@kurzinstruments.com">Contact</a> · <a href="#faq">About this demo (FAQ)</a></span>
+  </div>
+  <div class="site-footer__demo">
+    <p>This is a demo created by <a href="https://www.swiftyquote.com" target="_blank" rel="noopener">www.swiftyquote.com</a> | <a href="mailto:sales@swiftyquote.com">sales@swiftyquote.com</a></p>
+    <p>All data and photos are the property of Kurz Instruments, Inc. and were used for demo purposes only. HART® is a registered trademark of the FieldComm Group. PROFIBUS® is a registered trademark of PROFIBUS Nutzerorganisation e.V. Other trademarks belong to their owners.</p>
+  </div>
+</footer>
+
+<div class="modal" id="quoteModal" role="dialog" aria-modal="true" aria-labelledby="quoteTitle">
+  <div class="modal__box">
+    <div id="quoteFormView">
+      <div class="modal__head">
+        <div>
+          <h2 id="quoteTitle">Request a quotation</h2>
+          <p>Tell us where to send it. Your configuration is included automatically.</p>
+        </div>
+        <button class="icon-btn" type="button" data-close aria-label="Close">×</button>
+      </div>
+      <form id="quoteForm" novalidate>
+        <div class="chip-sum"><span>Configuration</span><strong id="quoteChip"></strong></div>
+        <div class="grid2">
+          <label class="field"><span class="l">Full name *</span><input name="name" autocomplete="name" required></label>
+          <label class="field"><span class="l">Company *</span><input name="company" autocomplete="organization" required></label>
+        </div>
+        <div class="grid2">
+          <label class="field"><span class="l">Email *</span><input name="email" type="email" autocomplete="email" required></label>
+          <label class="field"><span class="l">Phone</span><input name="phone" type="tel" autocomplete="tel"></label>
+        </div>
+        <label class="field"><span class="l">Delivery country / city</span><input name="place" autocomplete="country-name"></label>
+        <label class="field"><span class="l">Anything else we should know?</span><textarea name="message" placeholder="Timeline, duct drawings, questions…"></textarea></label>
+        <p class="consent">We use your details only to answer this request.</p>
+        <div class="actions" style="margin-top:18px">
+          <button class="btn btn--primary btn--lg" type="submit" id="quoteSubmit">Send quotation request</button>
+          <button class="btn btn--text" type="button" data-close>Cancel</button>
+        </div>
+      </form>
+    </div>
+    <div class="modal__done" id="quoteDoneView" hidden>
+      <div class="big"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+      <h3 id="doneTitle">Almost done</h3>
+      <p id="doneText"></p>
+      <div class="actions">
+        <button class="btn btn--primary" type="button" id="doneDownload">Download PDF to attach</button>
+        <button class="btn btn--ghost" type="button" id="doneCopy">Copy request text</button>
+        <button class="btn btn--text" type="button" data-close>Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast" role="status"></div>
+<!--__JSPDF__-->
+<script>
+/*__APP__*/
+</script>
+</body>
+</html>
