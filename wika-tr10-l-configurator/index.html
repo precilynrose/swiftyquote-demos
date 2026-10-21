@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>TR10-L Configurator | WIKA demo</title>
-<meta name="description" content="Step-by-step configurator for the WIKA TR10-L resistance thermometer (Ex d). Demo.">
+<title>Demo configurator for WIKA TR10-L–style resistance thermometers | SwiftyQuote</title>
+<meta name="description" content="Unofficial SwiftyQuote demo based on public WIKA data. Sensor, housing, signal output and process fitting for the TR10-L.">
 <style>
 @font-face{font-family:"HelveticaNeueLTPro Regular";font-style:normal;font-weight:400;font-display:swap;src:local("Helvetica Neue Regular"),local("HelveticaNeue"),local("Helvetica Neue")}
 @font-face{font-family:"HelveticaNeueLTPro Medium";font-style:normal;font-weight:500;font-display:swap;src:local("Helvetica Neue Medium"),local("HelveticaNeue-Medium")}
@@ -250,6 +250,8 @@ body.lock{overflow:hidden}
 noscript p{padding:16px;background:#fff6e3}
 
 </style>
+<meta name="robots" content="noindex, nofollow">
+<style>.sq-legal{max-width:1180px;margin:32px auto;padding:0 16px;font:14px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;color:#374151}.sq-legal__box{border:1px solid #e3e5e8;border-radius:12px;padding:20px 22px;background:#fafafa}.sq-legal h2{font-size:15px;line-height:1.4;margin:0 0 10px;color:#111827}.sq-legal p{margin:0 0 10px}.sq-legal p:last-child{margin:0}.sq-legal a{color:inherit;text-decoration:underline}.sq-req-note{margin:10px 0 0;font-size:.8rem;line-height:1.5;color:#5b6170}.sq-demo-tag{font-size:.85rem;color:#5b6170}.brand__title{display:inline!important}</style>
 </head>
 <body>
 <!-- SwiftyQuote: back to the main website -->
@@ -258,7 +260,7 @@ noscript p{padding:16px;background:#fff6e3}
 <a class="skip" href="#wizard">Skip to the configurator</a>
 <header class="site-head">
   <div class="wrap head-in">
-    <a class="logo" href="https://www.wika.com/en-sg/homepage.WIKA" target="_blank" rel="noopener" aria-label="WIKA website (opens in a new tab)"><svg id="logoSvg" role="img" aria-label="WIKA" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 61.5"><polygon fill="#16489a" fill-rule="evenodd" points="13.8 14.8 23.5 14.8 28.3 34.8 28.3 34.8 29.8 30 31.3 25 34 14.8 42.5 14.8 47.8 34.8 47.8 34.8 53.3 14.8 62.3 14.8 53.3 47.3 44.3 47.3 44.3 47.3 42.3 41.5 40.3 35.3 38.3 28 32.8 47.3 23.5 47.3 13.8 14.8 13.8 14.8 13.8 14.8 13.8 14.8 13.8 14.8"/><polygon fill="#16489a" points="67.5 14.8 75.5 14.8 75.5 47 67.5 47 67.5 14.8 67.5 14.8 67.5 14.8 67.5 14.8 67.5 14.8"/><polygon fill="#16489a" points="84.3 14.8 92.5 14.8 92.5 26.3 92.5 26.3 92.8 26.5 103.8 14.8 114.5 14.8 101.5 27.5 115.8 47 105.5 47 96.3 33.8 96.3 33.8 92.5 37.5 92.5 47 84.3 47 84.3 14.8 84.3 14.8 84.3 14.8 84.3 14.8 84.3 14.8"/><path fill="#16489a" fill-rule="evenodd" d="M133.8,22.8h0l-.8,2.5-1,2.5-1.5,5.5H137v-1l-3.2-9.5Zm-5.5-8h11.5l12,31.7V47H142l-1.2-3.5-.5-1.7-.5-1.8H128.3L126,47h-9.5l11.8-32.2Z"/><polygon fill="#16489a" points="0 0 165.5 0 165.5 47 156.5 47 156.5 8.3 9 8.3 9 53.3 171.3 53.3 171.3 0 180 0 180 61.5 0 61.5 0 0 0 0 0 0 0 0 0 0"/></svg></a>
+    
     <div class="head-title">Model TR10-L configurator</div>
   </div>
 </header>
@@ -272,7 +274,7 @@ noscript p{padding:16px;background:#fff6e3}
     <img class="hero-photo" src="data:image/jpeg;base64,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" alt="" aria-hidden="true">
   </div>
 </section>
-<noscript><p>This configurator needs JavaScript. Please enable it, or contact WIKA Singapore at info@wika.sg.</p></noscript>
+<noscript><p>This configurator needs JavaScript. Please enable it to use this demo.</p></noscript>
 <main class="wrap layout">
   <section class="wizard" id="wizard" aria-label="Configurator">
     <nav aria-label="Progress">
@@ -294,14 +296,19 @@ noscript p{padding:16px;background:#fff6e3}
     </div>
   </div>
 </div>
+<section class="sq-legal" aria-labelledby="sqLegalTitle"><div class="sq-legal__box">
+  <h2 id="sqLegalTitle">Independent demonstration – not an official WIKA tool</h2>
+  <p>This configurator was built by SwiftyQuote to demonstrate our configurator-building service. SwiftyQuote is not affiliated with, authorised, sponsored or endorsed by WIKA Alexander Wiegand SE &amp; Co. KG or any of its affiliates or distributors.</p>
+  <p>WIKA, TR10-L and any other trademarks shown are the property of their respective owners and are used only to identify the products this demo is based on.</p>
+  <p>Product information is drawn from publicly available manufacturer documentation (WIKA data sheet TE 60.12) and may be incomplete, out of date or wrong. Product photos are shown for demonstration purposes only.</p>
+  <p><strong>This demo is not for ordering.</strong> It does not create a quotation, offer or order with WIKA or SwiftyQuote. Any ordering code or specification shown is illustrative only. Always confirm model codes, specifications, approvals and suitability for your application (including any hazardous-area classification) directly with WIKA or its authorised representative before buying.</p>
+  <p>Any request you submit through this demo goes to <strong>SwiftyQuote</strong>, not to WIKA. We use your details only to reply to you about SwiftyQuote's services (see our <a href="https://swiftyquote.com/privacy-policy" target="_blank" rel="noopener">Privacy Policy</a>).</p>
+  <p>If you are WIKA or another rights holder and would like this demo changed or removed, email <a href="mailto:sales@swiftyquote.com">sales@swiftyquote.com</a> and we will act promptly.</p>
+</div></section>
+
 <footer class="site-foot">
   <div class="wrap">
     <div class="foot-grid">
-      <div>
-        <h4>WIKA Instrumentation Pte. Ltd.</h4>
-        <p>13 Kian Teck Crescent<br>628878 Singapore</p>
-        <p>Tel: +65 6844 5506 &middot; <a href="mailto:info@wika.sg">info@wika.sg</a></p>
-      </div>
       <div>
         <h4>Original product pages</h4>
         <p><a href="https://www.wika.com/en-sg/tr10_l.WIKA" target="_blank" rel="noopener">Model TR10-L on wika.com</a></p>
@@ -314,7 +321,7 @@ noscript p{padding:16px;background:#fff6e3}
     </div>
     <div class="credit">
       <p>This is a demo created by <a href="https://www.swiftyquote.com" target="_blank" rel="noopener">www.swiftyquote.com</a> | <a href="mailto:sales@swiftyquote.com">sales@swiftyquote.com</a></p>
-      <p style="margin-top:6px">All data and photos are the property of WIKA Alexander Wiegand SE &amp; Co. KG and were used for demo purposes only.</p>
+      <p style="margin-top:6px">Unofficial demo by SwiftyQuote. Not affiliated with, sponsored or endorsed by WIKA. WIKA and product names are trademarks of their owners. Not for ordering: verify all specifications with WIKA. Takedown requests: <a href="mailto:sales@swiftyquote.com">sales@swiftyquote.com</a></p>
     </div>
   </div>
 </footer>
@@ -732,10 +739,10 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
 const SETTINGS = {
   QUOTE_EMAIL: 'sales@swiftyquote.com',      // recipient of the mailto: quotation request
   QUOTE_ENDPOINT: '',               // optional form-service URL (POST, JSON). If set, it overrides mailto:
-  COMPANY_NAME: 'WIKA Instrumentation Pte. Ltd.',
-  COMPANY_ADDRESS: '13 Kian Teck Crescent, 628878 Singapore',
-  COMPANY_PHONE: '+65 6844 5506',
-  COMPANY_EMAIL: 'info@wika.sg',
+  COMPANY_NAME: 'SwiftyQuote (unofficial demo)',
+  COMPANY_ADDRESS: '',
+  COMPANY_PHONE: '',
+  COMPANY_EMAIL: 'sales@swiftyquote.com',
   PRODUCT_URL: 'https://www.wika.com/en-sg/tr10_l.WIKA',
   DATASHEET_URL: 'https://www.wika.com/media/Data-sheets/Temperature/Resistance-thermometers/ds_te6012_en_co.pdf',
   DATASHEET_NO: 'TE 60.12',
@@ -1295,7 +1302,7 @@ function renderFeedback(){
 /* ---------- summary panel ---------- */
 function renderSummary(){
   const a=state.a; const G=summaryGroups(a); const pts=pointsToCheck(a);
-  let h='<div class="card sum-card"><div class="sum-photo"><img src="'+PHOTO1+'" alt="Resistance thermometer TR10-L (example photo)"></div>'
+  let h='<div class="card sum-card"><div class="sum-photo"><img src="'+PHOTO1+'" alt="Illustrative product image (demo)"></div>'
     +'<div class="sum-model">TR10-L</div><div class="sum-sub">Resistance thermometer, flameproof enclosure (Ex d), for additional thermowell</div>';
   if(G.length){
     h+='<p class="sum-line"><b>'+esc(modelLine(a))+'</b></p>';
@@ -1433,7 +1440,7 @@ function field(id,label,type,req,extra){
 function openQuote(){
   lastFocus=document.activeElement; state.ref=state.ref||newRef();
   showModal('<button type="button" class="m-x" data-close aria-label="Close">&times;</button><h2 id="mTitle">Get a quotation</h2>'
-    +'<p class="m-lead">Tell us how to reach you. We send your whole configuration to WIKA Singapore. No prices are shown here; price and delivery time come with the quotation. Fields marked * are required.</p>'
+    +'<p class="m-lead">Tell us how to reach you. We send your whole configuration to SwiftyQuote. No prices are shown here; price and delivery time come with the quotation. Fields marked * are required.</p>'
     +'<form id="qForm" novalidate>'
     +field('qName','Your name','text',true,' autocomplete="name"')
     +field('qCompany','Company','text',true,' autocomplete="organization"')
@@ -1441,7 +1448,7 @@ function openQuote(){
     +field('qPhone','Phone','tel',false,' autocomplete="tel" inputmode="tel"')
     +field('qPlace','Delivery place','text',false,' autocomplete="address-level2"')
     +field('qMsg','Message','textarea',false,'')
-    +'<div class="m-actions"><button type="button" class="btn secondary" data-close>Cancel</button><button type="submit" class="btn navy">Send request</button></div></form>');
+    +'<div class="m-actions"><button type="button" class="btn secondary" data-close>Cancel</button><button type="submit" class="btn navy">Send request</button></div><p class="sq-req-note">This request is sent to SwiftyQuote (sales@swiftyquote.com), not to WIKA. This is a demo; for a real quotation contact WIKA directly.</p></form>');
 }
 document.addEventListener('click',e=>{ if(e.target.closest('[data-close]')) closeModal(); });
 document.addEventListener('submit',e=>{
@@ -1540,14 +1547,14 @@ async function buildPdf(){
   state.ref=state.ref||newRef(); const a=state.a;
   const NAVY=[0,37,101], BLUE=[22,72,154], GREY=[110,110,110], HAIR=[226,226,226], INK=[26,26,26], AMBER=[217,139,0], GREEN=[23,102,63];
   const L=16, R=194, W=R-L, BOTTOM=274, GX=9, CW=(W-GX)/2, GY=5; let y=0;
-  const logo=await logoPng();
+  const logo=null;
   const txt=(s,x,yy,o)=>doc.text(pdfSafe(s),x,yy,o);
   const wrap=(s,w)=>doc.splitTextToSize(pdfSafe(s),w);
   const font=(style,size,color)=>{ doc.setFont('helvetica',style); doc.setFontSize(size); if(color) doc.setTextColor(...color); };
   const hair=(x1,yy,x2,c)=>{ doc.setDrawColor(...(c||HAIR)); doc.setLineWidth(0.2); doc.line(x1,yy,x2,yy); };
 
   function pageHead(first){
-    if(logo) doc.addImage(logo,'PNG',L,first?12:10,first?30:20,first?10.3:6.8); else { font('bold',15,BLUE); txt('WIKA',L,19); }
+    font('bold',first?10:8,BLUE); txt('Unofficial demo by SwiftyQuote',L,first?19:15);
     font('normal',8,GREY);
     txt(first?'Configuration summary':'TR10-L configuration | '+state.ref,R,first?18:15,{align:'right'});
     hair(L,first?28:19,R); y=first?36:27;
@@ -1625,14 +1632,14 @@ async function buildPdf(){
   h2('Your notes'); font('normal',9,INK); { const ls=wrap(state.notes||'No notes.',W); ensure(ls.length*4+2); doc.text(ls,L,y+3); y+=ls.length*4+3; }
 
   /* disclaimer */
-  const disc='This summary is non-binding. It is a configuration request, not an offer or order confirmation. No prices are shown; price and delivery time are given in the quotation. Availability of all options and the technical suitability for your process are confirmed by WIKA. All data and photos are the property of WIKA Alexander Wiegand SE & Co. KG and were used for demo purposes only.';
+  const disc='This summary is non-binding. It is a configuration request, not an offer or order confirmation. No prices are shown; price and delivery time are given in the quotation. Availability of all options and the technical suitability for your process: confirm with the manufacturer. Unofficial SwiftyQuote demo, not for ordering and not affiliated with WIKA. WIKA, TR10-L and other trademarks belong to their owners.';
   font('normal',7.6,GREY); const dl=wrap(disc,W); ensure(dl.length*3.4+8); y+=5; hair(L,y,R); doc.text(dl,L,y+4.5);
 
   /* footer on every page */
   const n=doc.getNumberOfPages();
   for(let i=1;i<=n;i++){
     doc.setPage(i); hair(L,282,R); font('normal',7.5,GREY);
-    txt(SETTINGS.COMPANY_NAME+'  |  '+SETTINGS.COMPANY_ADDRESS+'  |  Tel '+SETTINGS.COMPANY_PHONE+'  |  '+SETTINGS.COMPANY_EMAIL,L,287);
+    txt('Unofficial demo by SwiftyQuote  |  sales@swiftyquote.com  |  Not affiliated with WIKA  |  Not for ordering',L,287);
     txt(i+' / '+n,R,287,{align:'right'});
   }
   return doc;
