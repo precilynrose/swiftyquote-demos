@@ -18,7 +18,7 @@ const DEMO_FAQ = [
   { q:"What is this demo?",
     a:"<p>A working example of a custom product configurator with a built-in quotation request, made by SwiftyQuote. It guides buyers through the choices for a product in plain language, then lets them download their configuration as a PDF or request a quotation.</p>" },
   { q:"Is the product information real? Can I order from this page?",
-    a:"<p>The product data, photos and logo belong to United Electric Controls and are used here for demonstration only. This page is not an official UE tool and you cannot place orders on it. Please contact United Electric Controls directly for real enquiries about the One Series.</p>" },
+    a:"<p>The product data and photos belong to United Electric Controls and are used here for demonstration only. This page is not an official UE tool and you cannot place orders on it. Please contact United Electric Controls directly for real enquiries about the One Series.</p>" },
   { q:"Can you build this for my own products?",
     a:"<p>Yes. The configurator is built around your product range, your options and your rules, and it takes on your branding: your logo, colours and fonts. It works for anything a buyer has to specify before they can get a quote, such as range, power, approvals, outputs or accessories.</p>" },
   { q:"What do you need from me to get started?",
@@ -28,7 +28,7 @@ const DEMO_FAQ = [
   { q:"How long does implementation take?",
     a:"<p>The timeline depends on the size of your range and the features you choose. A single-product configurator like this one is quicker than a full catalogue with several product families. You receive a clear timeline together with your quote, and you see a first working version early so you can give feedback before we finish.</p>" },
   { q:"Can it use our branding and languages?",
-    a:"<p>Yes. This demo already follows the United Electric Controls colours, fonts and logo. Your version follows yours. Additional languages can be added.</p>" },
+    a:"<p>Yes. This demo already follows the United Electric Controls colours and fonts. Your version follows yours. Additional languages can be added.</p>" },
   { q:"Where do the quotation requests go?",
     a:"<p>To whichever address or system you choose. In this demo, the button opens a pre-filled email that contains the full configuration. Your own version can send requests straight to your sales inbox or another system, so your team receives them in a clean, complete format.</p>" },
   { q:"Can it show prices or connect to our ERP or CRM?",
@@ -44,7 +44,7 @@ const DEMO_FAQ = [
 ];
 
 const IMG = { XP:"__IMG_XP__", W:"__IMG_W__", TEMP:"__IMG_TEMP__" };
-const LOGO_URL = "__LOGO__";
+const LOGO_URL = "";
 
 /* =====================================================================
    PRODUCT DATA
@@ -516,7 +516,7 @@ const VIEWS = {
     const rows = summaryRows(true), n = getNotes();
     return `<div class="step">
       ${head(6,"Review your configuration","Check everything below. You can change any answer, then download the PDF or ask for a quotation.")}
-      <div class="code-box"><div class="k">Part number</div><div class="v">${esc(partNumber())}</div><div class="s">${codeIsFinal() ? "Built from the bulletin's model, sensor and option codes. Confirmed by United Electric Controls in the quotation." : "“?” marks a choice we will confirm with you."}</div></div>
+      <div class="code-box"><div class="k">Part number</div><div class="v">${esc(partNumber())}</div><div class="s">${codeIsFinal() ? "Built from the bulletin's model, sensor and option codes. Illustrative only: confirm with the manufacturer." : "“?” marks a choice we will confirm with you."}</div></div>
       <div class="review"><table><tbody>
         ${rows.map(r => `<tr><th scope="row">${esc(r.k)}</th><td>${r.v?esc(r.v):'<span style="color:var(--grey-400)">–</span>'}
           ${r.step!=null?`<button class="edit" type="button" data-goto="${r.step}">Change</button>`:""}</td></tr>`).join("")}
@@ -719,7 +719,7 @@ function buildPdf(logo, photo){
   const T = t => pdfText(t);
   const hair = (x1, yy, x2) => { doc.setDrawColor(...LINE); doc.setLineWidth(.25); doc.line(x1, yy, x2, yy); };
   const small = (t, x, yy, o = {}) => { doc.setFont("helvetica", o.bold ? "bold" : "normal"); doc.setFontSize(o.size || 8); doc.setTextColor(...(o.color || GREY)); if (o.space) doc.setCharSpace(o.space); doc.text(T(t), x, yy, o.align ? { align:o.align } : undefined); if (o.space) doc.setCharSpace(0); };
-  const newPage = () => { doc.addPage(); small(`United Electric Controls  |  Product configuration ${code}  |  Ref. ${S.ref}`, M, 14, { size:7.5 }); hair(M, 17, W - M); y = 28; };
+  const newPage = () => { doc.addPage(); small(`SwiftyQuote demo  |  Product configuration ${code}  |  Ref. ${S.ref}`, M, 14, { size:7.5 }); hair(M, 17, W - M); y = 28; };
   const need = h => { if (y + h > PAGE_END) newPage(); };
   const section = (title, x, yy, w) => { small(title.toUpperCase(), x, yy, { size:7, bold:true, space:.5 }); hair(x, yy + 2.2, x + w); return yy + 8; };
   const item = (label, value, x, yy, w) => { small(label, x, yy, { size:7.5 }); doc.setFont("helvetica","bold"); doc.setFontSize(9.6); doc.setTextColor(...NAVY); const vl = doc.splitTextToSize(T(value || "-"), w); doc.text(vl, x, yy + 4.2); return yy + 4.2 + vl.length * 4.1 + 2.4; };
@@ -727,7 +727,7 @@ function buildPdf(logo, photo){
   const para = (t, x, yy, w, o = {}) => { doc.setFont("helvetica","normal"); doc.setFontSize(o.size || 8.6); doc.setTextColor(...(o.color || INK)); const l = doc.splitTextToSize(T(t), w); doc.text(l, x, yy); return yy + l.length * (o.lh || 4.1) + (o.gap == null ? 2 : o.gap); };
   const bullet = (t, x, yy, w, color) => { doc.setFillColor(...color); doc.rect(x, yy - 2, 1.4, 1.4, "F"); return para(t, x + 4.5, yy, w - 4.5); };
 
-  if (logo) doc.addImage(logo, "JPEG", M, 12, 20, 20*195/315);
+  small("Unofficial demo by SwiftyQuote", M, 20, { size:9, bold:true });
   small("Product configuration", W - M, 17, { size:10, bold:true, color:NAVY, align:"right" });
   small(`Ref. ${S.ref}   |   ${today}`, W - M, 22, { size:8, align:"right" });
   small("One Series electronic transmitter-switch", W - M, 26.5, { size:8, align:"right" });
@@ -744,7 +744,7 @@ function buildPdf(logo, photo){
   let ty = y + 4 + cl.length * 7.5;
   small(`${sensorText()}  |  ${areaText()}`, M, ty, { size:9.5 });
   ty = para("Digital electronic switch with programmable set point and deadband, local display and keypad, IAW(R) self-diagnostics and no moving parts. Replaces a switch, a gauge and (on loop-powered and 8-wire models) a transmitter.", M, ty + 6, CW - IW - 8, { size:8.6, color:GREY });
-  small(codeIsFinal() ? "Part number built from the bulletin's model, sensor and option codes; confirmed by UE in the quotation." : "\"?\" in the part number marks a choice to be confirmed.", M, ty + 1, { size:7.2 });
+  small(codeIsFinal() ? "Part number built from the bulletin's model, sensor and option codes; illustrative only, confirm with the manufacturer." : "\"?\" in the part number marks a choice to be confirmed.", M, ty + 1, { size:7.2 });
   y = Math.max(ty + 6, y + IW - 2);
 
   const R = Object.fromEntries(summaryRows(true).map(r => [r.k, r.v]));
@@ -784,10 +784,10 @@ function buildPdf(logo, photo){
 
   const pages = doc.getNumberOfPages();
   doc.setPage(pages);
-  small("Not a binding offer. Part number, price, availability and approvals are confirmed in a written quotation from UE. Specifications per bulletin One Series B-14.", M, 280.5, { size:6.8 });
+  small("Demo only, not for ordering. Illustrative: confirm all specifications with the manufacturer. Source: UE bulletin One Series B-14.", M, 280.5, { size:6.8 });
   for (let p = 1; p <= pages; p++){
     doc.setPage(p); hair(M, 284, W - M);
-    small("United Electric Controls  |  180 Dexter Avenue, Watertown, MA 02472 USA  |  +1 617 923 6900  |  insidesales@ueonline.com", M, 289, { size:6.8 });
+    small("Unofficial demo by SwiftyQuote  |  sales@swiftyquote.com  |  Not affiliated with United Electric Controls", M, 289, { size:6.8 });
     small(`${p} / ${pages}`, W - M, 289, { size:7, align:"right" });
   }
   return doc;
@@ -797,7 +797,7 @@ async function downloadPdf(){
   if (!isComplete()){ toast("Please complete all steps first."); return; }
   const btns = $$("#btnPdf,#doneDownload"); btns.forEach(b => b.disabled = true);
   try {
-    const logo = await loadImg(LOGO_URL, 315, 195).catch(() => null);
+    const logo = null;
     const photo = await loadImg(IMG[sumImgKey()], 400, 400).catch(() => null);
     buildPdf(logo, photo).save(pdfName());
     toast("PDF downloaded");

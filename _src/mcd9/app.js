@@ -18,7 +18,7 @@ const DEMO_FAQ = [
   { q:"What is this demo?",
     a:"<p>A working example of a custom product configurator with a built-in quotation request, made by SwiftyQuote. It guides buyers through the choices for a product in plain language, then lets them download their configuration as a PDF or request a quotation.</p>" },
   { q:"Is the product information real? Can I order from this page?",
-    a:"<p>The product data, photos and logo belong to McDaniel Controls, Inc. and are used here for demonstration only. This page is not an official McDaniel Controls tool and you cannot place orders on it. Please contact McDaniel Controls directly for real enquiries about the Series 9 gauges.</p>" },
+    a:"<p>The product data and photos belong to McDaniel Controls, Inc. and are used here for demonstration only. This page is not an official McDaniel Controls tool and you cannot place orders on it. Please contact McDaniel Controls directly for real enquiries about the Series 9 gauges.</p>" },
   { q:"Can you build this for my own products?",
     a:"<p>Yes. The configurator is built around your product range, your options and your rules, and it takes on your branding: your logo, colours and fonts. It works for anything a buyer has to specify before they can get a quote, such as range, power, approvals, outputs or accessories.</p>" },
   { q:"What do you need from me to get started?",
@@ -28,7 +28,7 @@ const DEMO_FAQ = [
   { q:"How long does implementation take?",
     a:"<p>The timeline depends on the size of your range and the features you choose. A single-product configurator like this one is quicker than a full catalogue with several product families. You receive a clear timeline together with your quote, and you see a first working version early so you can give feedback before we finish.</p>" },
   { q:"Can it use our branding and languages?",
-    a:"<p>Yes. This demo already follows the McDaniel Controls colours, fonts and logo. Your version follows yours. Additional languages can be added.</p>" },
+    a:"<p>Yes. This demo already follows the McDaniel Controls colours and fonts. Your version follows yours. Additional languages can be added.</p>" },
   { q:"Where do the quotation requests go?",
     a:"<p>To whichever address or system you choose. In this demo, the button opens a pre-filled email that contains the full configuration. Your own version can send requests straight to your sales inbox or another system, so your team receives them in a clean, complete format.</p>" },
   { q:"Can it show prices or connect to our ERP or CRM?",
@@ -44,7 +44,7 @@ const DEMO_FAQ = [
 ];
 
 const IMG = { M:"__IMG_M__" };
-const LOGO_URL = "__LOGO__";
+const LOGO_URL = "";
 
 /* =====================================================================
    PRODUCT DATA
@@ -287,18 +287,18 @@ function getNotes(){
   const r = rangeObj(), p = pres();
   if (S.media === "other") warn.push("Medium to be clarified with you before quotation.");
   if (S.media === "o2" && S.oxy === "no") warn.push("Oxygen medium without oxygen cleaning (code O): please check. Oxygen service normally needs an oxygen cleaned gauge.");
-  if ((S.media === "oxid" || S.media === "o2") && S.vib === "yes") warn.push("Vibration or pulsation, but glycerin filling cannot be used with your medium. Damping (restrictor screw or another fill fluid) to be confirmed by McDaniel.");
+  if ((S.media === "oxid" || S.media === "o2") && S.vib === "yes") warn.push("Vibration or pulsation, but glycerin filling cannot be used with your medium. Damping (restrictor screw or another fill fluid) to be confirmed with the manufacturer.");
   if (S.vib === "unk") warn.push("Vibration or pulsation at the mounting point to be confirmed with you.");
   if (p.ok && noRangeFits()) warn.push(`Your highest pressure (${presText()}) is above the largest Series 9 range of 0–10,000 psi. McDaniel will advise.`);
   if (r && p.v !== null && (r.type === "press" || r.type === "comp") && r.hi >= p.v && p.v > r.hi * 0.75) warn.push(`Your highest pressure is above 75% of the ${r.title} scale. The gauge stays accurate up to 130% of full scale, but a larger range gives a longer life. Please check the range.`);
   if (S.mount === "R") warn.push("Rear flange: back or bottom connection is possible. The connection position is to be confirmed with you.");
-  if (S.scale === "NH3") warn.push("Ammonia scale (NH3): the dial layout and the ranges it is offered for are not in the data sheet. To be confirmed by McDaniel.");
-  if ((S.scale === "B" || S.scale === "K") && (S.range === "S" || (r && r.type === "comp"))) warn.push("Dual scale on a vacuum or compound range: the vacuum part of the second scale is to be confirmed by McDaniel.");
+  if (S.scale === "NH3") warn.push("Ammonia scale (NH3): the dial layout and the ranges it is offered for are not in the data sheet. To be confirmed with the manufacturer.");
+  if ((S.scale === "B" || S.scale === "K") && (S.range === "S" || (r && r.type === "comp"))) warn.push("Dual scale on a vacuum or compound range: the vacuum part of the second scale is to be confirmed with the manufacturer.");
   const nonstock = [S.scale === "B" ? "psi/bar dual scale" : null, S.scale === "K" ? "psi/kPa dual scale" : null, S.oxy === "O" ? "oxygen cleaning" : null, S.thread === "18" ? "1/8″ NPT" : null].filter(Boolean);
-  if (nonstock.length) warn.push(`Non-stock option${nonstock.length > 1 ? "s" : ""} (${nonstock.join(", ")}): lead time to be confirmed by McDaniel.`);
-  if (S.lens === "glass") warn.push("Laminated safety glass lens is a special order without a code in the data sheet. To be confirmed by McDaniel.");
-  if (S.restr === "yes" && S.model && S.model !== "K9") warn.push(`Restrictor screw on the ${S.model}: optional, but the data sheet gives no code for it. To be confirmed by McDaniel.`);
-  if (specials().filter(c => c !== "?").length) warn.push("Special configuration codes: their order and separators in the part number are to be confirmed by McDaniel (the data sheet example K9D-GF has none).");
+  if (nonstock.length) warn.push(`Non-stock option${nonstock.length > 1 ? "s" : ""} (${nonstock.join(", ")}): lead time to be confirmed with the manufacturer.`);
+  if (S.lens === "glass") warn.push("Laminated safety glass lens is a special order without a code in the data sheet. To be confirmed with the manufacturer.");
+  if (S.restr === "yes" && S.model && S.model !== "K9") warn.push(`Restrictor screw on the ${S.model}: optional, but the data sheet gives no code for it. To be confirmed with the manufacturer.`);
+  if (specials().filter(c => c !== "?").length) warn.push("Special configuration codes: their order and separators in the part number are to be confirmed with the manufacturer (the data sheet example K9D-GF has none).");
   if (S.media === "nh3" && S.scale && S.scale !== "NH3") info.push("For ammonia refrigeration McDaniel also offers an ammonia scale (code NH3).");
   if (r && r.type === "press") info.push(r.hi <= 1000 ? "Ranges up to 1000 psi use a C-form 316 stainless steel bourdon tube." : "Ranges of 1500 psi and above use a spiral 316 stainless steel bourdon tube.");
   if (S.range === "T") info.push("Receiver gauge: dual scale, 0–100% primary and 0–10 square root secondary.");
@@ -411,7 +411,7 @@ const VIEWS = {
     const rows = summaryRows(true), n = getNotes();
     return `<div class="step">
       ${head(6,"Review your configuration","Check everything below. You can change any answer, then download the PDF or ask for a quotation.")}
-      <div class="code-box"><div class="k">Part number</div><div class="v">${esc(partNumber())}</div><div class="s">${codeIsFinal() ? "Built from the data sheet's How to order. Confirmed by McDaniel Controls in the quotation." : "“?” marks a choice we will confirm with you."}</div></div>
+      <div class="code-box"><div class="k">Part number</div><div class="v">${esc(partNumber())}</div><div class="s">${codeIsFinal() ? "Built from the data sheet's How to order. Illustrative only: confirm with the manufacturer." : "“?” marks a choice we will confirm with you."}</div></div>
       <div class="review"><table><tbody>
         ${rows.map(r => `<tr><th scope="row">${esc(r.k)}</th><td>${r.v?esc(r.v):'<span style="color:var(--grey-400)">–</span>'}
           ${r.step!=null?`<button class="edit" type="button" data-goto="${r.step}">Change</button>`:""}</td></tr>`).join("")}
@@ -618,7 +618,7 @@ function buildPdf(logo, photo){
   const T = t => pdfText(t);
   const hair = (x1, yy, x2) => { doc.setDrawColor(...LINE); doc.setLineWidth(.25); doc.line(x1, yy, x2, yy); };
   const small = (t, x, yy, o = {}) => { doc.setFont("helvetica", o.bold ? "bold" : "normal"); doc.setFontSize(o.size || 8); doc.setTextColor(...(o.color || GREY)); if (o.space) doc.setCharSpace(o.space); doc.text(T(t), x, yy, o.align ? { align:o.align } : undefined); if (o.space) doc.setCharSpace(0); };
-  const newPage = () => { doc.addPage(); small(`McDaniel Controls, Inc.  |  Product configuration ${code}  |  Ref. ${S.ref}`, M, 14, { size:7.5 }); hair(M, 17, W - M); y = 28; };
+  const newPage = () => { doc.addPage(); small(`SwiftyQuote demo  |  Product configuration ${code}  |  Ref. ${S.ref}`, M, 14, { size:7.5 }); hair(M, 17, W - M); y = 28; };
   const need = h => { if (y + h > PAGE_END) newPage(); };
   const section = (title, x, yy, w) => { small(title.toUpperCase(), x, yy, { size:7, bold:true, space:.5 }); hair(x, yy + 2.2, x + w); return yy + 8; };
   const item = (label, value, x, yy, w) => { small(label, x, yy, { size:7.5 }); doc.setFont("helvetica","bold"); doc.setFontSize(9.6); doc.setTextColor(...NAVY); const vl = doc.splitTextToSize(T(value || "-"), w); doc.text(vl, x, yy + 4.2); return yy + 4.2 + vl.length * 4.1 + 2.4; };
@@ -626,7 +626,7 @@ function buildPdf(logo, photo){
   const para = (t, x, yy, w, o = {}) => { doc.setFont("helvetica","normal"); doc.setFontSize(o.size || 8.6); doc.setTextColor(...(o.color || INK)); const l = doc.splitTextToSize(T(t), w); doc.text(l, x, yy); return yy + l.length * (o.lh || 4.1) + (o.gap == null ? 2 : o.gap); };
   const bullet = (t, x, yy, w, color) => { doc.setFillColor(...color); doc.rect(x, yy - 2, 1.4, 1.4, "F"); return para(t, x + 4.5, yy, w - 4.5); };
 
-  if (logo) doc.addImage(logo, "JPEG", M, 16, 56, 56*79/630);
+  small("Unofficial demo by SwiftyQuote", M, 20, { size:9, bold:true });
   small("Product configuration", W - M, 17, { size:10, bold:true, color:NAVY, align:"right" });
   small(`Ref. ${S.ref}   |   ${today}`, W - M, 22, { size:8, align:"right" });
   small("Series 9 liquid fillable, all stainless steel utility gauge", W - M, 26.5, { size:8, align:"right" });
@@ -644,7 +644,7 @@ function buildPdf(logo, photo){
   const m = modelObj();
   small(`${m ? `${m.id}: ${m.dial} dial, ${S.thread === "18" ? "1/8″ NPT" : m.npt}` : ""}  |  ${rangeObj()?.title || ""}`, M, ty, { size:9.5 });
   ty = para("All stainless steel utility gauge: 316 stainless steel wetted parts, 304 stainless steel case with crimped-on ring, welded case and socket, liquid fillable in the field or at the factory. Accuracy ASME B40.1 Grade A (2-1-2%).", M, ty + 6, CW - IW - 8, { size:8.6, color:GREY });
-  small(codeIsFinal() ? "Part number built from the data sheet's How to order; confirmed by McDaniel Controls in the quotation." : "\"?\" in the part number marks a choice to be confirmed.", M, ty + 1, { size:7.2 });
+  small(codeIsFinal() ? "Part number built from the data sheet's How to order; illustrative only, confirm with the manufacturer." : "\"?\" in the part number marks a choice to be confirmed.", M, ty + 1, { size:7.2 });
   y = Math.max(ty + 9, y + IW + 2);
 
   const R = Object.fromEntries(summaryRows(true).map(r => [r.k, r.v]));
@@ -686,10 +686,10 @@ function buildPdf(logo, photo){
 
   const pages = doc.getNumberOfPages();
   doc.setPage(pages);
-  small("Not a binding offer. Part number, price and availability are confirmed in a written quotation from McDaniel Controls. Specifications per data sheet K9E9G91201.", M, 280.5, { size:6.8 });
+  small("Demo only, not for ordering. Illustrative: confirm all specifications with the manufacturer. Source: McDaniel Controls data sheet K9E9G91201.", M, 280.5, { size:6.8 });
   for (let p = 1; p <= pages; p++){
     doc.setPage(p); hair(M, 284, W - M);
-    small("McDaniel Controls, Inc.  |  14148 Highway 90, Boutte, LA 70039 USA  |  (985) 758-2782  |  service@mcdanielcontrols.com", M, 289, { size:6.8 });
+    small("Unofficial demo by SwiftyQuote  |  sales@swiftyquote.com  |  Not affiliated with McDaniel Controls", M, 289, { size:6.8 });
     small(`${p} / ${pages}`, W - M, 289, { size:7, align:"right" });
   }
   return doc;
@@ -699,7 +699,7 @@ async function downloadPdf(){
   if (!isComplete()){ toast("Please complete all steps first."); return; }
   const btns = $$("#btnPdf,#doneDownload"); btns.forEach(b => b.disabled = true);
   try {
-    const logo = await loadImg(LOGO_URL, 630, 79).catch(() => null);
+    const logo = null;
     const photo = await loadImg(IMG.M, 407, 420).catch(() => null);
     buildPdf(logo, photo).save(pdfName());
     toast("PDF downloaded");

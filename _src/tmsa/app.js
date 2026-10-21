@@ -18,7 +18,7 @@ const DEMO_FAQ = [
   { q:"What is this demo?",
     a:"<p>A working example of a custom product configurator with a built-in quotation request, made by SwiftyQuote. It guides buyers through the choices for a product in plain language, then lets them download their configuration as a PDF or request a quotation.</p>" },
   { q:"Is the product information real? Can I order from this page?",
-    a:"<p>The product data, photos and logo belong to Turbines, Inc. and are used here for demonstration only. This page is not an official Turbines, Inc. tool and you cannot place orders on it. Please contact Turbines, Inc. directly for real enquiries about the TMSA 3A Series.</p>" },
+    a:"<p>The product data and photos belong to Turbines, Inc. and are used here for demonstration only. This page is not an official Turbines, Inc. tool and you cannot place orders on it. Please contact Turbines, Inc. directly for real enquiries about the TMSA 3A Series.</p>" },
   { q:"Can you build this for my own products?",
     a:"<p>Yes. The configurator is built around your product range, your options and your rules, and it takes on your branding: your logo, colours and fonts. It works for anything a buyer has to specify before they can get a quote, such as range, power, approvals, outputs or accessories.</p>" },
   { q:"What do you need from me to get started?",
@@ -28,7 +28,7 @@ const DEMO_FAQ = [
   { q:"How long does implementation take?",
     a:"<p>The timeline depends on the size of your range and the features you choose. A single-product configurator like this one is quicker than a full catalogue with several product families. You receive a clear timeline together with your quote, and you see a first working version early so you can give feedback before we finish.</p>" },
   { q:"Can it use our branding and languages?",
-    a:"<p>Yes. This demo already follows the Turbines, Inc. colours, fonts and logo. Your version follows yours. Additional languages can be added.</p>" },
+    a:"<p>Yes. This demo already follows the Turbines, Inc. colours and fonts. Your version follows yours. Additional languages can be added.</p>" },
   { q:"Where do the quotation requests go?",
     a:"<p>To whichever address or system you choose. In this demo, the button opens a pre-filled email that contains the full configuration. Your own version can send requests straight to your sales inbox or another system, so your team receives them in a clean, complete format.</p>" },
   { q:"Can it show prices or connect to our ERP or CRM?",
@@ -44,7 +44,7 @@ const DEMO_FAQ = [
 ];
 
 const IMG = { M:"__IMG_M__" };
-const LOGO_URL = "__LOGO__";
+const LOGO_URL = "";
 
 /* =====================================================================
    PRODUCT DATA
@@ -234,16 +234,16 @@ const isComplete = () => STEPS.slice(0,-1).every(s => validStep(s.id));
 function getNotes(){
   const warn = [], info = [];
   const s = sizeObj(), f = flow();
-  if (S.temp === "t450") warn.push("400 to 450 °F: the data sheet lists −100 to 450 °F, the product page −100 to +400 °F. The temperature limit for your meter is to be confirmed by Turbines, Inc.");
+  if (S.temp === "t450") warn.push("400 to 450 °F: the data sheet lists −100 to 450 °F, the product page −100 to +400 °F. The temperature limit for your meter is to be confirmed with the manufacturer");
   if (S.temp === "tout") warn.push("Your temperature is outside −100 to 450 °F. The data sheet says to consult the factory for other options.");
   if (S.temp === "tunk") warn.push("Process temperature to be confirmed (standard range −100 to 450 °F).");
   if (S.need === "unk") warn.push("Whether the line needs 3A compliance is to be confirmed with you.");
   if (S.industry === "other") warn.push("Application to be clarified with you before quotation.");
   if (f.ok && noSizeFits() && (f.mn !== null || f.mx !== null)) warn.push(`No single size covers ${flowText()}. Turbines, Inc. will advise on the size (sizes cover 1.25 to 650 GPM in total).`);
-  if (S.fit && S.fit !== "std") warn.push("Optional end fitting: the data sheet does not list which optional end fittings are offered for each meter size. To be confirmed by Turbines, Inc.");
+  if (S.fit && S.fit !== "std") warn.push("Optional end fitting: the data sheet does not list which optional end fittings are offered for each meter size. To be confirmed with the manufacturer");
   if (S.kind === "kit") warn.push("Rebuild kit (TKSA): the data sheet uses the same code structure as for the meter. The match with your existing meter is to be confirmed (please give its serial or model number).");
   if (S.bearing === "unk") warn.push("Bearing material to be chosen with Turbines, Inc. (shown as “?” in the part number).");
-  if (S.pickup === "PAI" || S.pickup === "2PAI") warn.push("Integrated pulse amplifier: supply voltage, output signal and temperature limits are not in the data sheet. To be confirmed by Turbines, Inc.");
+  if (S.pickup === "PAI" || S.pickup === "2PAI") warn.push("Integrated pulse amplifier: supply voltage, output signal and temperature limits are not in the data sheet. To be confirmed with the manufacturer");
   if (s && f.ok && f.mx !== null && f.mx > s.hi * 0.9 && !rawSizeWhy(s)) info.push(`Your highest flow is close to the top of the ${s.title} meter's range (${s.hi} GPM).`);
   if (S.comp === "3A") info.push("3A build: 3A compliant materials and surface finish to 3A Sanitary Standard 28-04. CRN certified.");
   if (S.elec === "yes") info.push("Display or flow monitor: quoted as a separate item. Tell us in the notes if you need rate, total, an analog output or batching.");
@@ -343,7 +343,7 @@ const VIEWS = {
       ${head(5,"Signal and extras","How the meter sends its flow signal, and whether you need a display.")}
       ${group("Pickup coil", "The magnetic pickup coil turns the rotor's rotation into pulses.", PICKUPS.map(p => optHtml({ name:"pickup", value:p.id, checked:S.pickup===p.id, title:p.title, desc:p.desc, badge:p.badge, meta:p.code || "blank" })).join(""), "opts--wide")}
       ${group("Do you also need a display or flow monitor?", null, radios("elec", ELECTRONICS), "opts--wide")}
-      ${helpHtml("signal","Which pickup do I need?",`<ul><li><strong>Single coil:</strong> the standard choice for one display, flow monitor or counter input.</li><li><strong>Two coils:</strong> two separate pulse signals from one meter, for example one for a local display and one for the control system.</li><li><strong>Integrated pulse amplifier:</strong> the meter sends an amplified pulse. Tell us your receiving instrument and the cable length, and Turbines, Inc. confirms the best option.</li></ul>`)}
+      ${helpHtml("signal","Which pickup do I need?",`<ul><li><strong>Single coil:</strong> the standard choice for one display, flow monitor or counter input.</li><li><strong>Two coils:</strong> two separate pulse signals from one meter, for example one for a local display and one for the control system.</li><li><strong>Integrated pulse amplifier:</strong> the meter sends an amplified pulse. Tell us your receiving instrument and the cable length, and confirm the best option with the manufacturer.</li></ul>`)}
       <div class="feedback" id="feedback"></div>
     </div>`;
   },
@@ -351,7 +351,7 @@ const VIEWS = {
     const rows = summaryRows(true), n = getNotes();
     return `<div class="step">
       ${head(6,"Review your configuration","Check everything below. You can change any answer, then download the PDF or ask for a quotation.")}
-      <div class="code-box"><div class="k">Part number</div><div class="v">${esc(partNumber())}</div><div class="s">${codeIsFinal() ? "Built from the data sheet's model number designation. Confirmed by Turbines, Inc. in the quotation." : "“?” marks a choice we will confirm with you."}</div></div>
+      <div class="code-box"><div class="k">Part number</div><div class="v">${esc(partNumber())}</div><div class="s">${codeIsFinal() ? "Built from the data sheet's model number designation. Illustrative only: confirm with the manufacturer." : "“?” marks a choice we will confirm with you."}</div></div>
       <div class="review"><table><tbody>
         ${rows.map(r => `<tr><th scope="row">${esc(r.k)}</th><td>${r.v?esc(r.v):'<span style="color:var(--grey-400)">–</span>'}
           ${r.step!=null?`<button class="edit" type="button" data-goto="${r.step}">Change</button>`:""}</td></tr>`).join("")}
@@ -404,7 +404,7 @@ const FEEDBACK = {
   build(){
     const out = [];
     if (S.comp === "3A") out.push(msg("ok","3A Sanitary Standard 28-04 compliant build: “-3A” in the part number."));
-    if (S.bearing === "unk") out.push(msg("info","Fine: the bearing shows as “?” in the part number until Turbines, Inc. confirms it."));
+    if (S.bearing === "unk") out.push(msg("info","Fine: the bearing shows as “?” in the part number until it is confirmed with the manufacturer."));
     return out.join("");
   },
   signal(){
@@ -556,7 +556,7 @@ function buildPdf(logo, photo){
   const T = t => pdfText(t);
   const hair = (x1, yy, x2) => { doc.setDrawColor(...LINE); doc.setLineWidth(.25); doc.line(x1, yy, x2, yy); };
   const small = (t, x, yy, o = {}) => { doc.setFont("helvetica", o.bold ? "bold" : "normal"); doc.setFontSize(o.size || 8); doc.setTextColor(...(o.color || GREY)); if (o.space) doc.setCharSpace(o.space); doc.text(T(t), x, yy, o.align ? { align:o.align } : undefined); if (o.space) doc.setCharSpace(0); };
-  const newPage = () => { doc.addPage(); small(`Turbines, Inc.  |  Product configuration ${code}  |  Ref. ${S.ref}`, M, 14, { size:7.5 }); hair(M, 17, W - M); y = 28; };
+  const newPage = () => { doc.addPage(); small(`SwiftyQuote demo  |  Product configuration ${code}  |  Ref. ${S.ref}`, M, 14, { size:7.5 }); hair(M, 17, W - M); y = 28; };
   const need = h => { if (y + h > PAGE_END) newPage(); };
   const section = (title, x, yy, w) => { small(title.toUpperCase(), x, yy, { size:7, bold:true, space:.5 }); hair(x, yy + 2.2, x + w); return yy + 8; };
   const item = (label, value, x, yy, w) => { small(label, x, yy, { size:7.5 }); doc.setFont("helvetica","bold"); doc.setFontSize(9.6); doc.setTextColor(...NAVY); const vl = doc.splitTextToSize(T(value || "-"), w); doc.text(vl, x, yy + 4.2); return yy + 4.2 + vl.length * 4.1 + 2.4; };
@@ -564,7 +564,7 @@ function buildPdf(logo, photo){
   const para = (t, x, yy, w, o = {}) => { doc.setFont("helvetica","normal"); doc.setFontSize(o.size || 8.6); doc.setTextColor(...(o.color || INK)); const l = doc.splitTextToSize(T(t), w); doc.text(l, x, yy); return yy + l.length * (o.lh || 4.1) + (o.gap == null ? 2 : o.gap); };
   const bullet = (t, x, yy, w, color) => { doc.setFillColor(...color); doc.rect(x, yy - 2, 1.4, 1.4, "F"); return para(t, x + 4.5, yy, w - 4.5); };
 
-  if (logo) doc.addImage(logo, "JPEG", M, 15, 44, 44*73/315);
+  small("Unofficial demo by SwiftyQuote", M, 20, { size:9, bold:true });
   small("Product configuration", W - M, 17, { size:10, bold:true, color:NAVY, align:"right" });
   small(`Ref. ${S.ref}   |   ${today}`, W - M, 22, { size:8, align:"right" });
   small(S.kind === "kit" ? "TKSA 3A sanitary turbine meter rebuild kit" : "TMSA 3A sanitary turbine flow meter", W - M, 26.5, { size:8, align:"right" });
@@ -581,7 +581,7 @@ function buildPdf(logo, photo){
   let ty = y + 4 + cl.length * 7.5;
   small(`${sizeText() || ""}  |  ${byId(COMPS,S.comp||"")?.title || ""}`, M, ty, { size:9.5 });
   ty = para("Sanitary style turbine flow meter for liquids: 316 stainless steel body, 17-4 PH stainless steel rotor, sanitary connections, CIP/SIP/COP/SOP cleanable. Linearity +/-0.5% and repeatability +/-0.1% over the standard flow range.", M, ty + 6, CW - IW - 8, { size:8.6, color:GREY });
-  small(codeIsFinal() ? "Part number built from the data sheet's model number designation; confirmed by Turbines, Inc. in the quotation." : "\"?\" in the part number marks a choice to be confirmed.", M, ty + 1, { size:7.2 });
+  small(codeIsFinal() ? "Part number built from the data sheet's model number designation; illustrative only, confirm with the manufacturer." : "\"?\" in the part number marks a choice to be confirmed.", M, ty + 1, { size:7.2 });
   y = Math.max(ty + 6, y + IW - 2);
 
   const R = Object.fromEntries(summaryRows(true).map(r => [r.k, r.v]));
@@ -622,10 +622,10 @@ function buildPdf(logo, photo){
 
   const pages = doc.getNumberOfPages();
   doc.setPage(pages);
-  small("Not a binding offer. Part number, price and availability are confirmed in a written quotation from Turbines, Inc. Specifications per TMSA 3A Series data sheet V2.", M, 280.5, { size:6.8 });
+  small("Demo only, not for ordering. Illustrative: confirm all specifications with the manufacturer. Source: Turbines, Inc. TMSA 3A Series data sheet V2.", M, 280.5, { size:6.8 });
   for (let p = 1; p <= pages; p++){
     doc.setPage(p); hair(M, 284, W - M);
-    small("Turbines, Inc.  |  15935 Highway 283 N., Altus, Oklahoma 73521 USA  |  1.800.809.1387  |  Sales@turbinesincorporated.com", M, 289, { size:6.8 });
+    small("Unofficial demo by SwiftyQuote  |  sales@swiftyquote.com  |  Not affiliated with Turbines, Inc.", M, 289, { size:6.8 });
     small(`${p} / ${pages}`, W - M, 289, { size:7, align:"right" });
   }
   return doc;
@@ -635,7 +635,7 @@ async function downloadPdf(){
   if (!isComplete()){ toast("Please complete all steps first."); return; }
   const btns = $$("#btnPdf,#doneDownload"); btns.forEach(b => b.disabled = true);
   try {
-    const logo = await loadImg(LOGO_URL, 630, 146).catch(() => null);
+    const logo = null;
     const photo = await loadImg(IMG.M, 400, 400).catch(() => null);
     buildPdf(logo, photo).save(pdfName());
     toast("PDF downloaded");

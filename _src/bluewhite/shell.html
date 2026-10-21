@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Demo configurator for Blue-White F-1000–style paddlewheel flow meters | SwiftyQuote</title>
+<meta name="description" content="Unofficial SwiftyQuote demo based on public Blue-White data. Digital paddlewheel flow meters: application and liquid, temperature and pressure check, fitting, pipe size and flow range, display, calibration units and O-rings.">
+<style>
+:root{
+  /* Blue-White Industries brand tokens (logo blue #005EB8 and accent orange #F48120 from blue-white.com) */
+  --navy-900:#0E2239; --navy-800:#16304F; --navy-700:#24456B; --navy-600:#33577F;
+  --blue:#005EB8; --blue-soft:#E8F1FB;
+  --steel:#7FAEDD;
+  --grey-050:#F4F4F8; --grey-100:#E8ECF2; --grey-200:#D2DAE3; --grey-400:#929AA2; --grey-600:#5A6067;
+  --ink:#3B3F45; --ink-strong:#1A1D22;
+  --label:#F48120;            /* Blue-White orange accent */
+  --ok:#1B7F4B; --ok-soft:#E7F5EC;
+  --warn:#8A5A00; --warn-soft:#FFF5DB; --warn-line:#F0D48A;
+  --bg:#FFFFFF; --card:#FFFFFF;
+  --radius:10px; --radius-lg:18px;
+  --shadow-sm:0 1px 2px rgba(0,0,0,.06),0 1px 3px rgba(0,0,0,.05);
+  --shadow-md:0 4px 16px rgba(0,0,0,.08),0 2px 6px rgba(0,0,0,.05);
+  --font:"Segoe UI",Arial,Helvetica,sans-serif;
+  --font-display:"Segoe UI",Arial,Helvetica,sans-serif;
+}
+/*__BASECSS__*/
+
+/* ---------- Blue-White additions ---------- */
+.brand img{height:30px}
+.btn--primary{background:var(--blue);border-color:var(--blue)}
+.btn--primary:hover{background:#004A93}
+.opt.is-off{cursor:not-allowed}
+.opt.is-off .opt__body{opacity:.5;background:var(--grey-050)}
+.opt.is-off input{cursor:not-allowed}
+.opt__mark.sq{border-radius:5px}
+.code-box{margin-top:22px;padding:14px 16px;border:1px solid var(--line);border-radius:var(--radius)}
+.code-box .k{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--grey-600)}
+.code-box .v{font:700 1.15rem/1.35 ui-monospace,Menlo,Consolas,monospace;color:var(--navy-800);margin-top:4px;overflow-wrap:anywhere}
+.code-box .s{font-size:.82rem;color:var(--grey-600);margin-top:4px}
+.summary__code{margin-top:10px;font:600 .9rem/1.35 ui-monospace,Menlo,Consolas,monospace;color:var(--navy-800);overflow-wrap:anywhere}
+.summary__img img{max-height:260px;object-fit:contain}
+.summary dd{overflow-wrap:anywhere;max-width:62%}
+.opt__meta{font-family:ui-monospace,Menlo,Consolas,monospace}
+@media (max-width:640px){.brand img{height:24px}.summary dd{max-width:58%}
+  .header__contact a:first-child{display:inline}.header__contact a:last-child{display:none}}
+</style>
+<meta name="robots" content="noindex, nofollow">
+<style>.sq-legal{max-width:1180px;margin:32px auto;padding:0 16px;font:14px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;color:#374151}.sq-legal__box{border:1px solid #e3e5e8;border-radius:12px;padding:20px 22px;background:#fafafa}.sq-legal h2{font-size:15px;line-height:1.4;margin:0 0 10px;color:#111827}.sq-legal p{margin:0 0 10px}.sq-legal p:last-child{margin:0}.sq-legal a{color:inherit;text-decoration:underline}.sq-req-note{margin:10px 0 0;font-size:.8rem;line-height:1.5;color:#5b6170}.sq-demo-tag{font-size:.85rem;color:#5b6170}.brand__title{display:inline!important}</style>
+</head>
+<body>
+<!-- SwiftyQuote: back to the main website -->
+<style>.sq-back{background:#f4f5f7;border-bottom:1px solid #e3e5e8;font:600 14px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}.sq-back div{max-width:1180px;margin:0 auto;padding:0 16px}.sq-back a{color:#1f2937;text-decoration:none;display:inline-flex;align-items:center;gap:6px;min-height:40px}.sq-back a:hover{text-decoration:underline}.sq-back a:focus-visible{outline:3px solid #2563eb;outline-offset:2px;border-radius:4px}@media print{.sq-back{display:none}}</style>
+<nav class="sq-back" aria-label="SwiftyQuote"><div><a href="https://swiftyquote.com/"><span aria-hidden="true">&larr;</span> Back to SwiftyQuote</a></div></nav>
+
+<header class="site-header">
+  <div class="site-header__in">
+    <span class="brand"><span class="brand__title">F-1000 Configurator</span></span>
+    <div class="header__contact"><span class="sq-demo-tag">Unofficial demo by SwiftyQuote</span></div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero__in">
+    <span class="eyebrow">Digital paddlewheel flow meters · F-1000</span>
+    <h1>Configure your F-1000 flow meter</h1>
+    <p>Answer a few simple questions about your liquid, your pipe and what the display should show. We check the flow ranges, pressure and temperature limits for you. Then download your configuration as a PDF or request a quotation.</p>
+  </div>
+</section>
+
+<main class="wrap">
+  <section class="panel" aria-live="polite">
+    <ol class="stepper" id="stepper" aria-label="Progress"></ol>
+    <div id="stage"></div>
+    <div class="nav" id="nav"></div>
+  </section>
+
+  <aside class="panel summary" aria-label="Your configuration so far">
+    <div class="summary__img" id="sumImgBox"><img id="sumImg" src="__IMG_MOLDED__" alt="Illustrative product image (demo)"></div>
+    <div class="summary__body">
+      <div class="summary__kicker">Your flow meter</div>
+      <div class="summary__model" id="sumModel">F-1000 paddlewheel flow meter</div>
+      <div class="summary__sub" id="sumSub">Your choices appear here as you go.</div>
+      <div class="summary__code" id="sumCode"></div>
+      <dl id="sumList"></dl>
+      <div class="summary__help">Questions about this demo? Write to <a href="mailto:sales@swiftyquote.com">sales@swiftyquote.com</a>.</div>
+    </div>
+  </aside>
+</main>
+
+<section class="faq" id="faq" aria-labelledby="faqTitle">
+  <div class="faq__box">
+    <div class="faq__grid">
+      <div>
+        <span class="eyebrow" style="color:var(--steel)">About this demo</span>
+        <h2 id="faqTitle">Frequently asked questions</h2>
+        <p class="faq__intro">Curious how this works, or want the same for your own products? Here are the answers to the questions we hear most.</p>
+        <div class="faq__cta">
+          <a class="btn btn--primary" id="faqCta" href="#">Ask about your own configurator</a>
+          <span class="faq__note" id="faqContact"></span>
+        </div>
+      </div>
+      <div class="faq__list" id="faqList"></div>
+    </div>
+  </div>
+</section>
+
+<section class="sq-legal" aria-labelledby="sqLegalTitle"><div class="sq-legal__box">
+  <h2 id="sqLegalTitle">Independent demonstration – not an official Blue-White tool</h2>
+  <p>This configurator was built by SwiftyQuote to demonstrate our configurator-building service. SwiftyQuote is not affiliated with, authorised, sponsored or endorsed by Blue-White Industries, Ltd. or any of its affiliates or distributors.</p>
+  <p>Blue-White, F-1000 and any other trademarks shown are the property of their respective owners and are used only to identify the products this demo is based on.</p>
+  <p>Product information is drawn from publicly available manufacturer documentation (Blue-White datasheet P.N. 85000-170 rev 9) and may be incomplete, out of date or wrong. Product photos are shown for demonstration purposes only.</p>
+  <p><strong>This demo is not for ordering.</strong> It does not create a quotation, offer or order with Blue-White or SwiftyQuote. Any ordering code or specification shown is illustrative only. Always confirm model codes, specifications, approvals and suitability for your application (including any hazardous-area classification) directly with Blue-White or its authorised representative before buying.</p>
+  <p>Any request you submit through this demo goes to <strong>SwiftyQuote</strong>, not to Blue-White. We use your details only to reply to you about SwiftyQuote's services (see our <a href="https://swiftyquote.com/privacy-policy" target="_blank" rel="noopener">Privacy Policy</a>).</p>
+  <p>If you are Blue-White or another rights holder and would like this demo changed or removed, email <a href="mailto:sales@swiftyquote.com">sales@swiftyquote.com</a> and we will act promptly.</p>
+</div></section>
+
+<footer class="site-footer">
+  <div class="site-footer__in">
+    <span><a href="https://www.blue-white.com/product/f-1000-digital-paddlewheel-flow-meter/" target="_blank" rel="noopener">Product page</a> · <a href="https://www.blue-white.com/?wpdmdl=79289" target="_blank" rel="noopener">Datasheet (PDF)</a> · <a href="#faq">About this demo (FAQ)</a></span>
+  </div>
+  <div class="site-footer__demo">
+    <p>This is a demo created by <a href="https://www.swiftyquote.com" target="_blank" rel="noopener">www.swiftyquote.com</a> | <a href="mailto:sales@swiftyquote.com">sales@swiftyquote.com</a></p>
+    <p>Unofficial demo by SwiftyQuote. Not affiliated with, sponsored or endorsed by Blue-White. Blue-White and product names are trademarks of their owners. Not for ordering: verify all specifications with Blue-White. Takedown requests: <a href="mailto:sales@swiftyquote.com">sales@swiftyquote.com</a></p>
+  </div>
+</footer>
+
+<div class="modal" id="quoteModal" role="dialog" aria-modal="true" aria-labelledby="quoteTitle">
+  <div class="modal__box">
+    <div id="quoteFormView">
+      <div class="modal__head">
+        <div>
+          <h2 id="quoteTitle">Request a quotation</h2>
+          <p>Tell us where to send it. Your configuration is included automatically.</p>
+        </div>
+        <button class="icon-btn" type="button" data-close aria-label="Close">×</button>
+      </div>
+      <form id="quoteForm" novalidate>
+        <div class="chip-sum"><span>Configuration</span><strong id="quoteChip"></strong></div>
+        <div class="grid2">
+          <label class="field"><span class="l">Full name *</span><input name="name" autocomplete="name" required></label>
+          <label class="field"><span class="l">Company *</span><input name="company" autocomplete="organization" required></label>
+        </div>
+        <div class="grid2">
+          <label class="field"><span class="l">Email *</span><input name="email" type="email" autocomplete="email" required></label>
+          <label class="field"><span class="l">Phone</span><input name="phone" type="tel" autocomplete="tel"></label>
+        </div>
+        <label class="field"><span class="l">Delivery country / city</span><input name="place" autocomplete="country-name"></label>
+        <label class="field"><span class="l">Anything else we should know?</span><textarea name="message" placeholder="Timeline, drawings, questions…"></textarea></label>
+        <p class="consent">We use your details only to answer this request.</p>
+        <div class="actions" style="margin-top:18px">
+          <button class="btn btn--primary btn--lg" type="submit" id="quoteSubmit">Send quotation request</button>
+          <button class="btn btn--text" type="button" data-close>Cancel</button>
+        </div>
+        <p class="sq-req-note">This request is sent to SwiftyQuote (sales@swiftyquote.com), not to Blue-White. This is a demo; for a real quotation contact Blue-White directly.</p>
+      </form>
+    </div>
+    <div class="modal__done" id="quoteDoneView" hidden>
+      <div class="big"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+      <h3 id="doneTitle">Almost done</h3>
+      <p id="doneText"></p>
+      <div class="actions">
+        <button class="btn btn--primary" type="button" id="doneDownload">Download PDF to attach</button>
+        <button class="btn btn--ghost" type="button" id="doneCopy">Copy request text</button>
+        <button class="btn btn--text" type="button" data-close>Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast" role="status"></div>
+<!--__JSPDF__-->
+<script>
+/*__APP__*/
+</script>
+</body>
+</html>

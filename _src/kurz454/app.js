@@ -18,7 +18,7 @@ const DEMO_FAQ = [
   { q:"What is this demo?",
     a:"<p>A working example of a custom product configurator with a built-in quotation request, made by SwiftyQuote. It guides buyers through the choices for a product in plain language, then lets them download their configuration as a PDF or request a quotation.</p>" },
   { q:"Is the product information real? Can I order from this page?",
-    a:"<p>The product data, photos and logo belong to Kurz Instruments and are used here for demonstration only. This page is not an official Kurz tool and you cannot place orders on it. Please contact Kurz Instruments directly for real enquiries about the Series 454FTB.</p>" },
+    a:"<p>The product data and photos belong to Kurz Instruments and are used here for demonstration only. This page is not an official Kurz tool and you cannot place orders on it. Please contact Kurz Instruments directly for real enquiries about the Series 454FTB.</p>" },
   { q:"Can you build this for my own products?",
     a:"<p>Yes. The configurator is built around your product range, your options and your rules, and it takes on your branding: your logo, colours and fonts. It works for anything a buyer has to specify before they can get a quote, such as range, power, approvals, outputs or accessories.</p>" },
   { q:"What do you need from me to get started?",
@@ -28,7 +28,7 @@ const DEMO_FAQ = [
   { q:"How long does implementation take?",
     a:"<p>The timeline depends on the size of your range and the features you choose. A single-product configurator like this one is quicker than a full catalogue with several product families. You receive a clear timeline together with your quote, and you see a first working version early so you can give feedback before we finish.</p>" },
   { q:"Can it use our branding and languages?",
-    a:"<p>Yes. This demo already follows the Kurz Instruments colours, fonts and logo. Your version follows yours. Additional languages can be added.</p>" },
+    a:"<p>Yes. This demo already follows the Kurz Instruments colours and fonts. Your version follows yours. Additional languages can be added.</p>" },
   { q:"Where do the quotation requests go?",
     a:"<p>To whichever address or system you choose. In this demo, the button opens a pre-filled email that contains the full configuration. Your own version can send requests straight to your sales inbox or another system, so your team receives them in a clean, complete format.</p>" },
   { q:"Can it show prices or connect to our ERP or CRM?",
@@ -44,7 +44,7 @@ const DEMO_FAQ = [
 ];
 
 const IMG = { M:"__IMG_M__" };
-const LOGO_URL = "__LOGO__";
+const LOGO_URL = "";
 
 /* =====================================================================
    PRODUCT DATA
@@ -454,7 +454,7 @@ function getNotes(){
   const warn = [], info = [];
   const g = gasObj(), p = press(), t = tInfo(), u = uState(), l = lenObj();
   if (S.app === "other") warn.push("Application to be clarified with you before quotation.");
-  if (S.vel === "A") warn.push("Vmax: the maximum calibrated velocity for your gas is set by Kurz. To be confirmed in the quotation.");
+  if (S.vel === "A") warn.push("Vmax: the maximum calibrated velocity for your gas is set by the manufacturer. Confirm with the manufacturer.");
   if (S.cal === "corr") info.push("Correlation calibration: add ±5% of reading to the accuracy specification.");
   if (S.cal === "lab") info.push("Laboratory calibration is done at your process pressure (feature F10) with high-purity gas, NIST traceable.");
   if (S.gas === "o2") warn.push("Oxygen: you are responsible for making sure the sensor is clean of hydrocarbons and safe for oxygen use.");
@@ -462,8 +462,8 @@ function getNotes(){
   if (S.gas === "cair" && S.cal === "corr") info.push("Compressed air correlation (0M) is correlated up to 70,000 SFPM.");
   if (["3","4"].includes(S.comp) && g && !["air","cair"].includes(g.id)) info.push("Velocity-temperature mapping is based on air; specific gas correlations are needed for accuracy at high temperatures.");
   if (hht() && !isPurge()) info.push(`High-temperature (HHT) model selected${t && t.mc > 260 ? " because your highest temperature is above 260 °C" : S.supp === "8" ? " because the PTFE-coated support is for HHT models" : ""}.`);
-  if (hht() && l && l.inch <= 6) warn.push("HHT models need at least 8″ between the enclosure and the mounting point (L2). A 6″ probe is to be confirmed by Kurz.");
-  if (flanged() && u.ok && uMax() !== null && u.v > uMax() + 0.005) warn.push(`U dimension ${u.v}″ looks long for a ${l.inch}″ probe (L = L2 + U − ${isPurge() ? "0.98" : "1.47"}″, L2 at least ${hht() ? "8.00" : "5.00"}″). Kurz will confirm the length.`);
+  if (hht() && l && l.inch <= 6) warn.push("HHT models need at least 8″ between the enclosure and the mounting point (L2). A 6″ probe is to be confirmed with the manufacturer.");
+  if (flanged() && u.ok && uMax() !== null && u.v > uMax() + 0.005) warn.push(`U dimension ${u.v}″ looks long for a ${l.inch}″ probe (L = L2 + U − ${isPurge() ? "0.98" : "1.47"}″, L2 at least ${hht() ? "8.00" : "5.00"}″). Confirm the length.`);
   if (isPurge()){
     if (p.ok && p.psig > 1) warn.push("The 454PFTB is designed for air at ambient pressure. Your process pressure is to be confirmed.");
     info.push("454PFTB: the Model 146 cleaning system needs instrument-quality compressed air at 60 to 125 psig (average use below 0.125 SCFM). Canadian Registration (CRN) is not available for this model.");
@@ -579,7 +579,7 @@ const VIEWS = {
       ${head(5,"Outputs and extras","How the meter talks to your control system, and anything else to include in the quotation.")}
       ${group("Communications and outputs", "USB and Modbus RS-485 (ASCII or RTU) are always included.", radios("io", IOS, o => ({ meta:`F11 ${o.id}` })), "opts--wide")}
       ${group("Safety certification", null, optHtml({ type:"checkbox", name:"sil", value:"1", checked:S.sil, title:"SIL1 certification via TÜV Rheinland", desc:"Adds the letter S to the end of the part number.", meta:"S" }))}
-      ${group("Mounting and installation hardware (optional)", "Quoted as separate items. Their part numbers are not in the ordering table, so Kurz confirms them in the quotation.", hw.map(h => optHtml({ type:"checkbox", name:"hw", value:h.id, checked:S.hw.includes(h.id), title:h.title, desc:h.desc })).join(""))}
+      ${group("Mounting and installation hardware (optional)", "Quoted as separate items. Their part numbers are not in the ordering table, so confirm them with the manufacturer.", hw.map(h => optHtml({ type:"checkbox", name:"hw", value:h.id, checked:S.hw.includes(h.id), title:h.title, desc:h.desc })).join(""))}
       ${helpHtml("extras","Which output option do I need?",`<ul><li><strong>Standard:</strong> two 4-20 mA signals, typically flow and temperature.</li><li><strong>Full:</strong> adds two relays (alarms, pulsed totalizer or purge), two digital inputs (for example to start the EPA drift check) and a 4-20 mA input.</li><li><strong>HART</strong> or <strong>Profibus DP:</strong> digital communication with your control system, plus the relays and inputs.</li></ul><p>A <strong>PID flow-control</strong> function using one 4-20 mA output is also available: mention it in the notes.</p>`)}
       <div class="feedback" id="feedback"></div>
     </div>`;
@@ -588,7 +588,7 @@ const VIEWS = {
     const rows = summaryRows(true), n = getNotes();
     return `<div class="step">
       ${head(6,"Review your configuration","Check everything below. You can change any answer, then download the PDF or ask for a quotation.")}
-      <div class="code-box"><div class="k">Part number</div><div class="v">${esc(partNumber())}</div><div class="s">${codeIsFinal() ? "Built from the parent number and features F1 to F12 of the Kurz ordering table. Confirmed by Kurz in the quotation." : "“?” marks a choice we will confirm with you."}</div>
+      <div class="code-box"><div class="k">Part number</div><div class="v">${esc(partNumber())}</div><div class="s">${codeIsFinal() ? "Built from the parent number and features F1 to F12 of the Kurz ordering table. Illustrative only: confirm with the manufacturer." : "“?” marks a choice we will confirm with you."}</div>
         <div class="code-grid">${[["Parent", parentNo() || "?", modelName() || ""], ...features()].map(([k,v,l]) => `<span><b>${esc(k)} ${esc(v || "?")}</b>${esc(l)}</span>`).join("")}</div></div>
       <div class="review"><table><tbody>
         ${rows.map(r => `<tr><th scope="row">${esc(r.k)}</th><td>${r.v?esc(r.v):'<span style="color:var(--grey-400)">–</span>'}
@@ -626,7 +626,7 @@ const FEEDBACK = {
     if (g && g.id === "c4" || g && g.id === "nh3" || g && g.id === "cl2") out.push(msg("info", `${g.title}: correlation calibration only.`));
     if (S.cal && gasCode()) out.push(msg("ok", `Gas calibration code ${gasCode()}.`));
     if (S.gas === "o2") out.push(msg("warn","Oxygen: the sensor must be kept clean of hydrocarbons and safe for oxygen use."));
-    if (S.vel === "A") out.push(msg("info","Vmax will be confirmed by Kurz for your gas."));
+    if (S.vel === "A") out.push(msg("info","Vmax for your gas: confirm with the manufacturer."));
     const t = tInfo(); if (t && COMPS.every(c => compOffWhy(c))) out.push(msg("warn","No temperature compensation covers your temperature range. Please check the temperatures in step 1 or talk to us."));
     return out.join("");
   },
@@ -806,7 +806,7 @@ function buildPdf(logo, photo){
   const T = t => pdfText(t);
   const hair = (x1, yy, x2) => { doc.setDrawColor(...LINE); doc.setLineWidth(.25); doc.line(x1, yy, x2, yy); };
   const small = (t, x, yy, o = {}) => { doc.setFont("helvetica", o.bold ? "bold" : "normal"); doc.setFontSize(o.size || 8); doc.setTextColor(...(o.color || GREY)); if (o.space) doc.setCharSpace(o.space); doc.text(T(t), x, yy, o.align ? { align:o.align } : undefined); if (o.space) doc.setCharSpace(0); };
-  const newPage = () => { doc.addPage(); small(`Kurz Instruments  |  Product configuration ${code}  |  Ref. ${S.ref}`, M, 14, { size:7.5 }); hair(M, 17, W - M); y = 28; };
+  const newPage = () => { doc.addPage(); small(`SwiftyQuote demo  |  Product configuration ${code}  |  Ref. ${S.ref}`, M, 14, { size:7.5 }); hair(M, 17, W - M); y = 28; };
   const need = h => { if (y + h > PAGE_END) newPage(); };
   const section = (title, x, yy, w) => { small(title.toUpperCase(), x, yy, { size:7, bold:true, space:.5 }); hair(x, yy + 2.2, x + w); return yy + 8; };
   const item = (label, value, x, yy, w) => { small(label, x, yy, { size:7.5 }); doc.setFont("helvetica","bold"); doc.setFontSize(9.6); doc.setTextColor(...NAVY); const vl = doc.splitTextToSize(T(value || "-"), w); doc.text(vl, x, yy + 4.2); return yy + 4.2 + vl.length * 4.1 + 2.4; };
@@ -814,7 +814,7 @@ function buildPdf(logo, photo){
   const para = (t, x, yy, w, o = {}) => { doc.setFont("helvetica","normal"); doc.setFontSize(o.size || 8.6); doc.setTextColor(...(o.color || INK)); const l = doc.splitTextToSize(T(t), w); doc.text(l, x, yy); return yy + l.length * (o.lh || 4.1) + (o.gap == null ? 2 : o.gap); };
   const bullet = (t, x, yy, w, color) => { doc.setFillColor(...color); doc.rect(x, yy - 2, 1.4, 1.4, "F"); return para(t, x + 4.5, yy, w - 4.5); };
 
-  if (logo) doc.addImage(logo, "JPEG", M, 11, 30, 30*238/420);
+  small("Unofficial demo by SwiftyQuote", M, 20, { size:9, bold:true });
   small("Product configuration", W - M, 17, { size:10, bold:true, color:NAVY, align:"right" });
   small(`Ref. ${S.ref}   |   ${today}`, W - M, 22, { size:8, align:"right" });
   small("Series 454FTB insertion thermal mass flow meter", W - M, 26.5, { size:8, align:"right" });
@@ -829,7 +829,7 @@ function buildPdf(logo, photo){
   let ty = y + 4 + cl.length * 7;
   small(`${modelName()}  |  ${gasText()}`, M, ty, { size:9.5 });
   ty = para("Constant temperature thermal mass flow meter for industrial gases: direct mass flow and temperature, fast response, zero velocity as a valid data point and continuous self-monitoring electronics.", M, ty + 6, CW - IW - 8, { size:8.6, color:GREY });
-  small(codeIsFinal() ? "Part number built from the parent number and features F1 to F12; confirmed by Kurz in the quotation." : "\"?\" in the part number marks a choice to be confirmed.", M, ty + 1, { size:7.2 });
+  small(codeIsFinal() ? "Part number built from the parent number and features F1 to F12; illustrative only, confirm with the manufacturer." : "\"?\" in the part number marks a choice to be confirmed.", M, ty + 1, { size:7.2 });
   y = Math.max(ty + 6, y + IH - 2);
 
   const R = Object.fromEntries(summaryRows(true).map(r => [r.k, r.v]));
@@ -879,10 +879,10 @@ function buildPdf(logo, photo){
 
   const pages = doc.getNumberOfPages();
   doc.setPage(pages);
-  small("Not a binding offer. Part number, price, availability and approvals are confirmed in a written quotation from Kurz. Specifications per document 367551M.", M, 280.5, { size:6.8 });
+  small("Demo only, not for ordering. Illustrative: confirm all specifications with the manufacturer. Source: Kurz technical specifications, document 367551M.", M, 280.5, { size:6.8 });
   for (let p = 1; p <= pages; p++){
     doc.setPage(p); hair(M, 284, W - M);
-    small("Kurz Instruments, Inc.  |  2411 Garden Road, Monterey, CA 93940 USA  |  800-424-7356  |  sales@kurzinstruments.com", M, 289, { size:6.8 });
+    small("Unofficial demo by SwiftyQuote  |  sales@swiftyquote.com  |  Not affiliated with Kurz", M, 289, { size:6.8 });
     small(`${p} / ${pages}`, W - M, 289, { size:7, align:"right" });
   }
   return doc;
@@ -892,7 +892,7 @@ async function downloadPdf(){
   if (!isComplete()){ toast("Please complete all steps first."); return; }
   const btns = $$("#btnPdf,#doneDownload"); btns.forEach(b => b.disabled = true);
   try {
-    const logo = await loadImg(LOGO_URL, 420, 238).catch(() => null);
+    const logo = null;
     const photo = await loadImg(IMG.M, 260, 380).catch(() => null);
     buildPdf(logo, photo).save(pdfName());
     toast("PDF downloaded");

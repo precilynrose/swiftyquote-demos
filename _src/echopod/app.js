@@ -18,7 +18,7 @@ const DEMO_FAQ = [
   { q:"What is this demo?",
     a:"<p>A working example of a custom product configurator with a built-in quotation request, made by SwiftyQuote. It guides buyers through the choices for a product in plain language, then lets them download their configuration as a PDF or request a quotation.</p>" },
   { q:"Is the product information real? Can I order from this page?",
-    a:"<p>The product data, photos and logo belong to Flowline and are used here for demonstration only. This page is not an official Flowline tool and you cannot place orders on it. Please contact Flowline directly for real enquiries about the EchoPod.</p>" },
+    a:"<p>The product data and photos belong to Flowline and are used here for demonstration only. This page is not an official Flowline tool and you cannot place orders on it. Please contact Flowline directly for real enquiries about the EchoPod.</p>" },
   { q:"Can you build this for my own products?",
     a:"<p>Yes. The configurator is built around your product range, your options and your rules, and it takes on your branding: your logo, colours and fonts. It works for anything a buyer has to specify before they can get a quote, such as range, power, approvals, outputs or accessories.</p>" },
   { q:"What do you need from me to get started?",
@@ -28,7 +28,7 @@ const DEMO_FAQ = [
   { q:"How long does implementation take?",
     a:"<p>The timeline depends on the size of your range and the features you choose. A single-product configurator like this one is quicker than a full catalogue with several product families. You receive a clear timeline together with your quote, and you see a first working version early so you can give feedback before we finish.</p>" },
   { q:"Can it use our branding and languages?",
-    a:"<p>Yes. This demo already follows the Flowline colours, fonts and logo. Your version follows yours. Additional languages can be added.</p>" },
+    a:"<p>Yes. This demo already follows the Flowline colours and fonts. Your version follows yours. Additional languages can be added.</p>" },
   { q:"Where do the quotation requests go?",
     a:"<p>To whichever address or system you choose. In this demo, the button opens a pre-filled email that contains the full configuration. Your own version can send requests straight to your sales inbox or another system, so your team receives them in a clean, complete format.</p>" },
   { q:"Can it show prices or connect to our ERP or CRM?",
@@ -44,7 +44,7 @@ const DEMO_FAQ = [
 ];
 
 const IMG = { U6:"__IMG_U6__", U12:"__IMG_U12__" };
-const LOGO_URL = "__LOGO__";
+const LOGO_URL = "";
 
 /* =====================================================================
    PRODUCT DATA
@@ -153,7 +153,7 @@ const LOSTS = [
 ];
 const PRECONF = [
   { id:"site",    title:"We set it up on site", desc:"Sensor height, fill height and the other settings are entered at commissioning.", badge:"Standard" },
-  { id:"factory", title:"Please set it up before shipping", desc:"Needs your tank dimensions. Not listed on the data sheet: to be confirmed by Flowline." }
+  { id:"factory", title:"Please set it up before shipping", desc:"Needs your tank dimensions. Not listed on the data sheet: to be confirmed with the manufacturer." }
 ];
 const POWERS = [
   { id:"have",  title:"I have a 24 VDC loop supply or PLC input", desc:"The EchoPod needs 14-28 VDC, max. 500 Ω loop resistance at 24 VDC." },
@@ -264,25 +264,25 @@ function fitChoices(){
     case "adapter":
       if (npt && u6){ add(["LM52-3890","LM52-2800"], "3″ tank adapter with 3″ × 2″ reducer bushing", "LM52-3890 + LM52-2800, PVC. Flowline's choice for best results.", "Recommended"); add(["LM52-2890"], "2″ tank adapter", "LM52-2890, 2″ NPT bulkhead, PVC."); }
       else if (npt) add(["LM52-3890"], "3″ tank adapter", "LM52-3890, 3″ NPT bulkhead, PVC.", "Recommended");
-      else tbc = "The Flowline tank adapters listed for the EchoPod are NPT. A tank adapter for the G-thread version is to be confirmed with Flowline.";
+      else tbc = "The Flowline tank adapters listed for the EchoPod are NPT. A tank adapter for the G-thread version is to be confirmed with the manufacturer.";
       break;
     case "flange":
       if (npt && u6){ add(["LM52-2850"], "2″ flange", "LM52-2850, 2″ × 2″ NPT, CPVC, schedule 80."); add(["LM52-3850","LM52-2800"], "3″ flange with 3″ × 2″ reducer bushing", "LM52-3850 + LM52-2800."); }
       else if (npt) add(["LM52-3850"], "3″ flange", "LM52-3850, 3″ × 3″ NPT, CPVC, schedule 80.", "Recommended");
-      else tbc = "The Flowline flanges listed for the EchoPod are NPT. A flange for the G-thread version is to be confirmed with Flowline.";
+      else tbc = "The Flowline flanges listed for the EchoPod are NPT. A flange for the G-thread version is to be confirmed with the manufacturer.";
       break;
     case "bracket":
       if (u6) add([npt ? "LM50-1001" : "LM50-1061"], `Side mount bracket, 2″ ${th}`, `${npt ? "LM50-1001" : "LM50-1061"}, polypropylene. For open tanks and sumps.`, "Recommended");
-      else tbc = "The LM50 side mount brackets listed are for 2″ sensors (UG06). A bracket for the 3″ UG12 is to be confirmed with Flowline.";
+      else tbc = "The LM50 side mount brackets listed are for 2″ sensors (UG06). A bracket for the 3″ UG12 is to be confirmed with the manufacturer.";
       break;
     case "standpipe":
       if (u6 && npt){ add(["LM52-2400"], "3″ thread × 2″ thread reducer bushing", "LM52-2400. Screws into a 3″ threaded coupling on top of the pipe.", "Recommended"); add(["LM52-2410"], "3″ slip × 2″ thread reducer", "LM52-2410. Glues onto a 3″ slip coupling."); }
-      else tbc = u6 ? "The standpipe reducers listed (LM52-2400, LM52-2410) have a 2″ NPT thread. The adapter for the G-thread version is to be confirmed." : "The UG12 needs a standpipe of at least 4″ ID. The matching reducer for its 3″ thread is to be confirmed with Flowline.";
+      else tbc = u6 ? "The standpipe reducers listed (LM52-2400, LM52-2410) have a 2″ NPT thread. The adapter for the G-thread version is to be confirmed." : "The UG12 needs a standpipe of at least 4″ ID. The matching reducer for its 3″ thread is to be confirmed with the manufacturer.";
       break;
     case "existing":
       if (u6 && npt && S.port === "3") add(["LM52-2800"], "3″ × 2″ reducer bushing", "LM52-2800, NPT, PVC.", "Recommended");
       else if (u6 && npt && S.port === "4") add(["LM52-3800"], "4″ × 2″ reducer bushing", "LM52-3800.", "Recommended");
-      else if (S.port) tbc = `A reducer bushing for the ${sz} ${th} thread into your ${S.port}″ port is to be confirmed with Flowline.`;
+      else if (S.port) tbc = `A reducer bushing for the ${sz} ${th} thread into your ${S.port}″ port is to be confirmed with the manufacturer.`;
       break;
   }
   own();
@@ -378,12 +378,12 @@ function getNotes(){
   if (S.temp === "unk") warn.push("Process temperature to be confirmed (EchoPod: −40 to 80 °C, −40 to 176 °F).");
   if (S.foam === "light") warn.push("Light foam can weaken the echo. The data sheet recommends the EchoPod for non-foaming liquids: to be confirmed for your application.");
   if (S.foam === "heavy" && S.mount !== "standpipe") warn.push("Foam is common in your tank. Flowline recommends a standpipe to keep foam away from the sensor.");
-  if (S.vapour === "heavy") warn.push("Heavy fumes or steam: the EchoPod is meant for non-foaming or mildly vaporous liquids. To be confirmed with Flowline.");
+  if (S.vapour === "heavy") warn.push("Heavy fumes or steam: the EchoPod is meant for non-foaming or mildly vaporous liquids. To be confirmed with the manufacturer.");
   if (S.liquid === "other") warn.push("Liquid to be clarified with you before quotation.");
   if (S.liquid === "chem" || S.liquid === "other") warn.push("Chemical compatibility to be confirmed: wetted parts are PVDF (transducer) and polypropylene (enclosure), with a Viton® gasket on G threads.");
   if (S.dims !== "yes") warn.push("Tank dimensions to be confirmed: they decide the range (UG06 or UG12) and the 4-20 mA span.");
   if (fc && fc.tbc) warn.push(fc.tbc);
-  if (S.preconf === "factory") warn.push("Setting up the sensor before shipping is not listed on the data sheet: to be confirmed by Flowline.");
+  if (S.preconf === "factory") warn.push("Setting up the sensor before shipping is not listed on the data sheet: to be confirmed with the manufacturer.");
   if (S.mount === "standpipe") info.push(`Standpipe: at least ${isU6() ? "3″" : "4″"} inner diameter, running the full measuring span, bottom always under the liquid, a 45° notch at the bottom and a 1/4″ vent hole in the dead band. Pipe supplied by you.`);
   if (["adapter","flange","existing"].includes(S.mount)) info.push("Risers: keep a 2:1 ratio of inner diameter to height (a 3″ riser no taller than 6″, larger risers no taller than 12″).");
   if (S.tank === "cone") info.push("Cone-bottom tank: mount the sensor over the deepest part of the tank.");
@@ -510,7 +510,7 @@ const VIEWS = {
     return `<div class="step">
       ${head(6,"Review your configuration","Check everything below. You can change any answer, then download the PDF or ask for a quotation.")}
       <div class="code-box"><div class="k">Part number</div><div class="v">${esc(partNumber())}</div>
-        <div class="s">${codeIsFinal() ? "Built from the data sheet's ordering code. Confirmed by Flowline in the quotation." : "“?” marks a choice we will confirm with you."}</div>
+        <div class="s">${codeIsFinal() ? "Built from the data sheet's ordering code. Illustrative only: confirm with the manufacturer." : "“?” marks a choice we will confirm with you."}</div>
         ${acc.length ? `<div class="k" style="margin-top:14px">Accessories (each, per sensor)</div><div class="acc">${acc.map(([c,d]) => `${esc(c)} <span style="font-weight:400;font-family:var(--font)">${esc(d)}</span>`).join("<br>")}</div>` : ""}</div>
       <div class="review"><table><tbody>
         ${rows.map(r => `<tr><th scope="row">${esc(r.k)}</th><td>${r.v?esc(r.v):'<span style="color:var(--grey-400)">–</span>'}
@@ -561,7 +561,7 @@ const FEEDBACK = {
   setup(){
     const out = [];
     if (S.setup === "webcal" && S.fob === "0") out.push(msg("info","Without a Fob you need one you already own to connect WebCal."));
-    if (S.preconf === "factory") out.push(msg("warn","Setting up before shipping is not listed on the data sheet: to be confirmed by Flowline."));
+    if (S.preconf === "factory") out.push(msg("warn","Setting up before shipping is not listed on the data sheet: to be confirmed with the manufacturer."));
     if (S.fob != null && S.range && S.thread != null) out.push(msg("ok",`Your part number: ${partNumber()}.`));
     return out.join("");
   },
@@ -730,7 +730,7 @@ function buildPdf(logo, photo){
   const T = t => pdfText(t);
   const hair = (x1, yy, x2) => { doc.setDrawColor(...LINE); doc.setLineWidth(.25); doc.line(x1, yy, x2, yy); };
   const small = (t, x, yy, o = {}) => { doc.setFont("helvetica", o.bold ? "bold" : "normal"); doc.setFontSize(o.size || 8); doc.setTextColor(...(o.color || GREY)); if (o.space) doc.setCharSpace(o.space); doc.text(T(t), x, yy, o.align ? { align:o.align } : undefined); if (o.space) doc.setCharSpace(0); };
-  const newPage = () => { doc.addPage(); small(`Flowline  |  Product configuration ${code}  |  Ref. ${S.ref}`, M, 14, { size:7.5 }); hair(M, 17, W - M); y = 28; };
+  const newPage = () => { doc.addPage(); small(`SwiftyQuote demo  |  Product configuration ${code}  |  Ref. ${S.ref}`, M, 14, { size:7.5 }); hair(M, 17, W - M); y = 28; };
   const need = h => { if (y + h > PAGE_END) newPage(); };
   const section = (title, x, yy, w) => { small(title.toUpperCase(), x, yy, { size:7, bold:true, space:.5 }); hair(x, yy + 2.2, x + w); return yy + 8; };
   const item = (label, value, x, yy, w) => { small(label, x, yy, { size:7.5 }); doc.setFont("helvetica","bold"); doc.setFontSize(9.6); doc.setTextColor(...NAVY); const vl = doc.splitTextToSize(T(value || "-"), w); doc.text(vl, x, yy + 4.2); return yy + 4.2 + vl.length * 4.1 + 2.4; };
@@ -738,7 +738,7 @@ function buildPdf(logo, photo){
   const para = (t, x, yy, w, o = {}) => { doc.setFont("helvetica","normal"); doc.setFontSize(o.size || 8.6); doc.setTextColor(...(o.color || INK)); const l = doc.splitTextToSize(T(t), w); doc.text(l, x, yy); return yy + l.length * (o.lh || 4.1) + (o.gap == null ? 2 : o.gap); };
   const bullet = (t, x, yy, w, color) => { doc.setFillColor(...color); doc.rect(x, yy - 2, 1.4, 1.4, "F"); return para(t, x + 4.5, yy, w - 4.5); };
 
-  if (logo) doc.addImage(logo, "JPEG", M, 15, 40, 40*80/274);
+  small("Unofficial demo by SwiftyQuote", M, 20, { size:9, bold:true });
   small("Product configuration", W - M, 17, { size:10, bold:true, color:NAVY, align:"right" });
   small(`Ref. ${S.ref}   |   ${today}`, W - M, 22, { size:8, align:"right" });
   small("EchoPod(R) reflective ultrasonic level transmitter", W - M, 26.5, { size:8, align:"right" });
@@ -753,7 +753,7 @@ function buildPdf(logo, photo){
   const r = rangeObj();
   small(`${r ? `EchoPod UG${r.id}, ${r.short} range` : "EchoPod"}  |  ${threadText() || ""}`, M, ty, { size:9.5 });
   ty = para("Non-contact reflective ultrasonic liquid level transmitter with 4-20 mA two-wire output, 6-digit LCD and push-button setup (or WebCal(R) software). Reflective Technology(TM) measures reliably with condensation. PVDF transducer, IP68 polypropylene enclosure.", M, ty + 6, CW - IW - 8, { size:8.6, color:GREY });
-  small(codeIsFinal() ? "Part number built from the data sheet's ordering code; confirmed by Flowline in the quotation." : "\"?\" in the part number marks a choice to be confirmed.", M, ty + 1, { size:7.2 });
+  small(codeIsFinal() ? "Part number built from the data sheet's ordering code; illustrative only, confirm with the manufacturer." : "\"?\" in the part number marks a choice to be confirmed.", M, ty + 1, { size:7.2 });
   y = Math.max(ty + 6, y + IW - 2);
 
   const R = Object.fromEntries(summaryRows(true).map(r => [r.k, r.v]));
@@ -797,10 +797,10 @@ function buildPdf(logo, photo){
 
   const pages = doc.getNumberOfPages();
   doc.setPage(pages);
-  small("Not a binding offer. Part number, price and availability are confirmed in a written quotation from Flowline. Specifications per data sheet DS310140 Rev A3.", M, 280.5, { size:6.8 });
+  small("Demo only, not for ordering. Illustrative: confirm all specifications with the manufacturer. Source: Flowline data sheet DS310140 Rev A3.", M, 280.5, { size:6.8 });
   for (let p = 1; p <= pages; p++){
     doc.setPage(p); hair(M, 284, W - M);
-    small("Flowline, Inc.  |  10500 Humbolt Street, Los Alamitos, CA 90720 USA  |  +1 562 598 3015  |  level.solution@flowline.com", M, 289, { size:6.8 });
+    small("Unofficial demo by SwiftyQuote  |  sales@swiftyquote.com  |  Not affiliated with Flowline", M, 289, { size:6.8 });
     small(`${p} / ${pages}`, W - M, 289, { size:7, align:"right" });
   }
   return doc;
@@ -810,7 +810,7 @@ async function downloadPdf(){
   if (!isComplete()){ toast("Please complete all steps first."); return; }
   const btns = $$("#btnPdf,#doneDownload"); btns.forEach(b => b.disabled = true);
   try {
-    const logo = await loadImg(LOGO_URL, 548, 160).catch(() => null);
+    const logo = null;
     const photo = await loadImg(IMG[sumImgKey()], 288, 288).catch(() => null);
     buildPdf(logo, photo).save(pdfName());
     toast("PDF downloaded");

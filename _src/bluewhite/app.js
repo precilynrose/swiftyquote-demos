@@ -18,7 +18,7 @@ const DEMO_FAQ = [
   { q:"What is this demo?",
     a:"<p>A working example of a custom product configurator with a built-in quotation request, made by SwiftyQuote. It guides buyers through the choices for a product in plain language, then lets them download their configuration as a PDF or request a quotation.</p>" },
   { q:"Is the product information real? Can I order from this page?",
-    a:"<p>The product data, photos and logo belong to Blue-White Industries and are used here for demonstration only. This page is not an official Blue-White tool and you cannot place orders on it. Please contact Blue-White Industries directly for real enquiries about the F-1000.</p>" },
+    a:"<p>The product data and photos belong to Blue-White Industries and are used here for demonstration only. This page is not an official Blue-White tool and you cannot place orders on it. Please contact Blue-White Industries directly for real enquiries about the F-1000.</p>" },
   { q:"Can you build this for my own products?",
     a:"<p>Yes. The configurator is built around your product range, your options and your rules, and it takes on your branding: your logo, colours and fonts. It works for anything a buyer has to specify before they can get a quote, such as range, power, approvals, outputs or accessories.</p>" },
   { q:"What do you need from me to get started?",
@@ -28,7 +28,7 @@ const DEMO_FAQ = [
   { q:"How long does implementation take?",
     a:"<p>The timeline depends on the size of your range and the features you choose. A single-product configurator like this one is quicker than a full catalogue with several product families. You receive a clear timeline together with your quote, and you see a first working version early so you can give feedback before we finish.</p>" },
   { q:"Can it use our branding and languages?",
-    a:"<p>Yes. This demo already follows the Blue-White Industries colours, fonts and logo. Your version follows yours. Additional languages can be added.</p>" },
+    a:"<p>Yes. This demo already follows the Blue-White Industries colours and fonts. Your version follows yours. Additional languages can be added.</p>" },
   { q:"Where do the quotation requests go?",
     a:"<p>To whichever address or system you choose. In this demo, the button opens a pre-filled email that contains the full configuration. Your own version can send requests straight to your sales inbox or another system, so your team receives them in a clean, complete format.</p>" },
   { q:"Can it show prices or connect to our ERP or CRM?",
@@ -44,7 +44,7 @@ const DEMO_FAQ = [
 ];
 
 const IMG = { MOLDED:"__IMG_MOLDED__", PVC:"__IMG_PVC__", SADDLE:"__IMG_SADDLE__" };
-const LOGO_URL = "__LOGO__";
+const LOGO_URL = "";
 
 /* =====================================================================
    PRODUCT DATA
@@ -306,8 +306,8 @@ function getNotes(){
   if (S.fluid === "chem" || S.fluid === "mix") warn.push(`Chemical compatibility to be confirmed: wetted parts are PVDF (sensor, paddlewheel, axle), ${S.oring === "E" ? "EPDM" : "FKM"} O-rings${s ? ` and a ${matLow(s.mat)} fitting` : ""}.`);
   if (S.fluid === "unk") warn.push("Liquid to be confirmed with you (chemical compatibility of the wetted parts).");
   if (S.app === "other") warn.push("Application to be clarified with you before quotation.");
-  if (unitDigitsCheck()) warn.push(`The full-scale value in ${S.unit} would have more than 6 digits. The datasheet says such calibrations may not be available: to be confirmed by Blue-White.`);
-  if (suffix()) warn.push(`Option suffix "-${suffix()}" written as in the datasheet's model number matrix; exact format to be confirmed by Blue-White.`);
+  if (unitDigitsCheck()) warn.push(`The full-scale value in ${S.unit} would have more than 6 digits. The datasheet says such calibrations may not be available: to be confirmed with the manufacturer.`);
+  if (suffix()) warn.push(`Option suffix "-${suffix()}" written as in the datasheet's model number matrix; exact format to be confirmed with the manufacturer.`);
   if (S.fit === "P") warn.push("Without pipe fitting (option P): please tell us which existing fitting the meter will be mounted on.");
   if (S.type === "S4") info.push("Schedule 40 saddles fit PVC or iron pipe.");
   if (t && (t.fam === "ips" || t.fam === "din")) info.push("Saddle models cause no pressure drop. Saddle fittings over 3″ and 90 mm are PVC; 1-1/2″, 2″, 3″, 50, 63 and 90 mm are PVDF.");
@@ -395,7 +395,7 @@ const VIEWS = {
       ${head(4,"Seals and pipe fitting","Both have a standard choice. Change them only if you need to.")}
       ${group("Sensor O-rings", null, radios("oring", ORINGS, o => ({ meta:o.code ? `-${o.code}` : null })), "opts--wide")}
       ${group("Pipe fitting", null, radios("fit", FITS, o => ({ meta:o.code ? `-${o.code}` : null })), "opts--wide")}
-      ${helpHtml("extras","FKM or EPDM?",`<p>FKM is the standard and suits water and many chemicals. EPDM is an alternative for some chemicals where FKM is not recommended. If you are unsure, tell us the chemical in the notes: Blue-White will confirm the right seal.</p>`)}
+      ${helpHtml("extras","FKM or EPDM?",`<p>FKM is the standard and suits water and many chemicals. EPDM is an alternative for some chemicals where FKM is not recommended. If you are unsure, tell us the chemical in the notes: confirm with the manufacturer the right seal.</p>`)}
       <div class="feedback" id="feedback"></div>
     </div>`;
   },
@@ -403,7 +403,7 @@ const VIEWS = {
     const rows = summaryRows(true), n = getNotes();
     return `<div class="step">
       ${head(5,"Review your configuration","Check everything below. You can change any answer, then download the PDF or ask for a quotation.")}
-      <div class="code-box"><div class="k">Model number</div><div class="v">${esc(partNumber())}</div><div class="s">${codeIsFinal() ? "Built from the datasheet's model number matrix. Confirmed by Blue-White in the quotation." : "“?” marks a choice we will confirm with you."}</div></div>
+      <div class="code-box"><div class="k">Model number</div><div class="v">${esc(partNumber())}</div><div class="s">${codeIsFinal() ? "Built from the datasheet's model number matrix. Illustrative only: confirm with the manufacturer." : "“?” marks a choice we will confirm with you."}</div></div>
       <div class="review"><table><tbody>
         ${rows.map(r => `<tr><th scope="row">${esc(r.k)}</th><td>${r.v?esc(r.v):'<span style="color:var(--grey-400)">–</span>'}
           ${r.step!=null?`<button class="edit" type="button" data-goto="${r.step}">Change</button>`:""}</td></tr>`).join("")}
@@ -593,7 +593,7 @@ function buildPdf(logo, photo){
   const T = t => pdfText(t);
   const hair = (x1, yy, x2) => { doc.setDrawColor(...LINE); doc.setLineWidth(.25); doc.line(x1, yy, x2, yy); };
   const small = (t, x, yy, o = {}) => { doc.setFont("helvetica", o.bold ? "bold" : "normal"); doc.setFontSize(o.size || 8); doc.setTextColor(...(o.color || GREY)); if (o.space) doc.setCharSpace(o.space); doc.text(T(t), x, yy, o.align ? { align:o.align } : undefined); if (o.space) doc.setCharSpace(0); };
-  const newPage = () => { doc.addPage(); small(`Blue-White Industries  |  Product configuration ${code}  |  Ref. ${S.ref}`, M, 14, { size:7.5 }); hair(M, 17, W - M); y = 28; };
+  const newPage = () => { doc.addPage(); small(`SwiftyQuote demo  |  Product configuration ${code}  |  Ref. ${S.ref}`, M, 14, { size:7.5 }); hair(M, 17, W - M); y = 28; };
   const need = h => { if (y + h > PAGE_END) newPage(); };
   const section = (title, x, yy, w) => { small(title.toUpperCase(), x, yy, { size:7, bold:true, space:.5 }); hair(x, yy + 2.2, x + w); return yy + 8; };
   const item = (label, value, x, yy, w) => { small(label, x, yy, { size:7.5 }); doc.setFont("helvetica","bold"); doc.setFontSize(9.6); doc.setTextColor(...NAVY); const vl = doc.splitTextToSize(T(value || "-"), w); doc.text(vl, x, yy + 4.2); return yy + 4.2 + vl.length * 4.1 + 2.4; };
@@ -601,7 +601,7 @@ function buildPdf(logo, photo){
   const para = (t, x, yy, w, o = {}) => { doc.setFont("helvetica","normal"); doc.setFontSize(o.size || 8.6); doc.setTextColor(...(o.color || INK)); const l = doc.splitTextToSize(T(t), w); doc.text(l, x, yy); return yy + l.length * (o.lh || 4.1) + (o.gap == null ? 2 : o.gap); };
   const bullet = (t, x, yy, w, color) => { doc.setFillColor(...color); doc.rect(x, yy - 2, 1.4, 1.4, "F"); return para(t, x + 4.5, yy, w - 4.5); };
 
-  if (logo) doc.addImage(logo, "JPEG", M, 15, 36, 36*97/420);
+  small("Unofficial demo by SwiftyQuote", M, 20, { size:9, bold:true });
   small("Product configuration", W - M, 17, { size:10, bold:true, color:NAVY, align:"right" });
   small(`Ref. ${S.ref}   |   ${today}`, W - M, 22, { size:8, align:"right" });
   small("F-1000 digital paddlewheel flow meter", W - M, 26.5, { size:8, align:"right" });
@@ -618,7 +618,7 @@ function buildPdf(logo, photo){
   let ty = y + 4 + cl.length * 7.5;
   small(`${sizeText()}  |  ${typeObj().title}`, M, ty, { size:9.5 });
   ty = para("Battery-powered digital paddlewheel flow meter with a 6-digit LCD (up to 4 decimal places), tamper-proof factory programming and a resettable totalizer on totalizing models. NEMA 4X (IP56) enclosure.", M, ty + 6, CW - IW - 8, { size:8.6, color:GREY });
-  small(codeIsFinal() ? "Model number built from the datasheet's model number matrix; confirmed by Blue-White in the quotation." : "\"?\" in the model number marks a choice to be confirmed.", M, ty + 1, { size:7.2 });
+  small(codeIsFinal() ? "Model number built from the datasheet's model number matrix; illustrative only, confirm with the manufacturer." : "\"?\" in the model number marks a choice to be confirmed.", M, ty + 1, { size:7.2 });
   y = Math.max(ty + 6, y + IW - 2);
 
   const R = Object.fromEntries(summaryRows(true).map(r => [r.k, r.v]));
@@ -654,10 +654,10 @@ function buildPdf(logo, photo){
 
   const pages = doc.getNumberOfPages();
   doc.setPage(pages);
-  small("Not a binding offer. Model number, price and availability are confirmed in a written quotation from Blue-White. Specifications per datasheet P.N. 85000-170 rev 9.", M, 280.5, { size:6.8 });
+  small("Demo only, not for ordering. Illustrative: confirm all specifications with the manufacturer. Source: Blue-White datasheet P.N. 85000-170 rev 9.", M, 280.5, { size:6.8 });
   for (let p = 1; p <= pages; p++){
     doc.setPage(p); hair(M, 284, W - M);
-    small("Blue-White Industries  |  5300 Business Drive, Huntington Beach, CA 92649 USA  |  +1 714 893 8529  |  sales@blue-white.com", M, 289, { size:6.8 });
+    small("Unofficial demo by SwiftyQuote  |  sales@swiftyquote.com  |  Not affiliated with Blue-White", M, 289, { size:6.8 });
     small(`${p} / ${pages}`, W - M, 289, { size:7, align:"right" });
   }
   return doc;
@@ -667,7 +667,7 @@ async function downloadPdf(){
   if (!isComplete()){ toast("Please complete all steps first."); return; }
   const btns = $$("#btnPdf,#doneDownload"); btns.forEach(b => b.disabled = true);
   try {
-    const logo = await loadImg(LOGO_URL, 420, 97).catch(() => null);
+    const logo = null;
     const photo = await loadImg(IMG[sumImgKey()], 400, 400).catch(() => null);
     buildPdf(logo, photo).save(pdfName());
     toast("PDF downloaded");
