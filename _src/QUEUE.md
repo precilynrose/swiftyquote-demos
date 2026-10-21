@@ -12,7 +12,7 @@ Source: ~/Downloads/SwiftyQuote-product-links.xlsx (sheet "Product links"); the 
 | 4 | done 2026-10-19 onicon-f1000-configurator | ONICON Incorporated | F-1000 series insertion turbine flow meters | (none captured) | https://www.onicon.com/wp-content/uploads/f-1000-series-turbine-flow-meter-catalog-sheet-doc-0003616.pdf (p7); ordering guide https://www.onicon.com/wp-content/uploads/0266-6-Ordering-Guide-07-18.pdf (p1) |
 | 5 | done 2026-10-20 bluewhite-f1000-configurator | Blue-White Industries | F-1000 paddlewheel flowmeter | (none captured) | https://www.blue-white.com/?wpdmdl=79289 (p4, ordering from p3) |
 | 6 | done 2026-10-20 kurz-454ftb-configurator | Kurz Instruments | 454FTB insertion thermal mass flow meter | (none captured) | https://www.kurzinstruments.com/downloads/454ftb/Kurz-Model-454FTB-Technical-Specifications.pdf (p6) |
-| 7 | todo | Turbines, Inc. | TMSA 3A sanitary turbine flow meter | (none captured) | https://www.turbinesincorporated.com/wp-content/uploads/TMSA-Data-Sheet-1.pdf (p2) |
+| 7 | done 2026-10-21 turbines-tmsa-configurator | Turbines, Inc. | TMSA 3A sanitary turbine flow meter | (none captured) | https://www.turbinesincorporated.com/wp-content/uploads/TMSA-Data-Sheet-1.pdf (p2) |
 | 8 | todo | McDaniel Controls | Series 9 stainless utility gauge | (none captured) | https://www.mcdanielcontrols.com/pdf_files/k91201.pdf (p2) |
 | 9 | todo | Max Machinery | P213 piston flow meter | https://www.maxmachinery.com/product-category/piston-flow-meters/ | https://www.maxmachinery.com/wp-content/uploads/2018/08/P213-Pulse.pdf (p1) |
 | 10 | todo | Absolute Process Instruments | API 4390 DIN isolated transmitter | (none captured) | https://api-usa.com/pdf/old/api4390-4391-4392.pdf (p1; file is in an /old/ folder) |
