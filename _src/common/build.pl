@@ -14,10 +14,14 @@ for my $m (@maps){ my ($k, $p) = split /=/, $m, 2; my $d = b64($p); $html =~ s/_
 # one question at a time: added to every demo before the last </body>
 my $oq = slurp("$common/one-question.html");
 $html =~ s{</body>(?!.*</body>)}{$oq\n</body>}s or die "no </body>\n";
+# shared two-column PDF data sheet (sq-datasheet.js v1, 2026-11-03): after the main script and one-question, right before </body>
+my $ds = slurp("$common/sq-datasheet.js"); $ds .= "\n" unless $ds =~ /\n\z/;
+$html =~ s{</body>(?!.*</body>)}{<script>\n$ds</script>\n</body>}s or die "no </body>\n";
 die "unreplaced: $1\n" if $html =~ /(__(?:IMG_[A-Z0-9]+|LOGO)__)/;
 # legal pass (2026-10-21): every demo must carry the unofficial-demo disclaimer, noindex and no manufacturer logo
 die "missing disclaimer block (.sq-legal)\n" unless $html =~ /class="sq-legal"/;
 die "missing noindex\n" unless $html =~ /<meta name="robots" content="noindex/;
 die "missing request note (.sq-req-note)\n" unless $html =~ /class="sq-req-note"/;
+die "missing data sheet script (sq-datasheet.js)\n" unless $html =~ /__sqDatasheetV1/;
 open my $o, '>', $out or die $!; binmode $o; print $o $html; close $o;
 print "ok ", length($html), "\n";
